@@ -1,5 +1,6 @@
 import asyncio
 import logging
+from contextlib import asynccontextmanager
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from accident_detector import detect_frame_accident
 
@@ -7,10 +8,10 @@ from accident_detector import detect_frame_accident
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-app = FastAPI(title="Accident Detector", description="Real-time traffic accident detection")
-
 # List of active connections
 active_connections = set()
+# Task reference to allow cleanup
+detection_task = None
 
 # Background task for sending updates to all clients
 async def detection_broadcast_loop():
@@ -43,11 +44,28 @@ async def detection_broadcast_loop():
             logger.error(f"Error in broadcast loop: {e}")
             await asyncio.sleep(1)  # Avoid tight loops on error
 
-@app.on_event("startup")
-async def startup_event():
-    """Start the detection background task when application starts"""
-    asyncio.create_task(detection_broadcast_loop())
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Startup: create background task
+    global detection_task
+    detection_task = asyncio.create_task(detection_broadcast_loop())
     logger.info("Started background detection loop")
+    
+    yield
+    
+    # Shutdown: cancel task
+    if detection_task:
+        detection_task.cancel()
+        try:
+            await detection_task
+        except asyncio.CancelledError:
+            logger.info("Background detection task cancelled")
+
+app = FastAPI(
+    title="Accident Detector", 
+    description="Real-time traffic accident detection",
+    lifespan=lifespan
+)
 
 @app.get("/")
 def health_check():
