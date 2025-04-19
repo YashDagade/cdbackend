@@ -1,11 +1,11 @@
 # API Routes Documentation
 
-This document outlines all available API endpoints for the Real-Time Accident Detector service.
+This document outlines all available API endpoints for the Real-Time Multi-Stream Accident Detector service.
 
 ## Base URL
 
-- **Local Development**: `http://localhost:10000`
-- **Production**: `https://cdbackend.onrender.com`
+- **Local Development**: `http://localhost:8000` (or port specified when running uvicorn)
+- **Production (Example)**: `https://your-service-name.onrender.com`
 
 ## HTTP Endpoints
 
@@ -13,131 +13,197 @@ This document outlines all available API endpoints for the Real-Time Accident De
 
 - **URL**: `/`
 - **Method**: `GET`
-- **Description**: Simple health check endpoint to verify the service is running.
-- **Response**: 
+- **Description**: Simple health check endpoint to verify the service is running and lists active stream IDs.
+- **Success Response (200)**:
   ```json
   {
-    "status": "ok"
+    "status": "ok",
+    "streams_running": ["mn_c550", "another_stream_id"]
   }
   ```
 - **Example**:
   ```bash
-  curl https://cdbackend.onrender.com/
+  curl http://localhost:8000/
   ```
 
-## WebSocket Endpoints
+### List Available Streams
 
-### Real-Time Accident Detections
-
-- **URL**: `/ws/detections`
-- **WebSocket Protocol**: `ws://` (local) or `wss://` (production)
-- **Description**: Streams accident detection results at approximately 5 FPS.
-- **Response Format**: Text message containing either `"accident"` or `"no accident"`.
-- **Connection Example**:
-  - Browser:
-    ```javascript
-    const socket = new WebSocket("wss://cdbackend.onrender.com/ws/detections");
-    
-    socket.onmessage = (event) => {
-      console.log("Detection result:", event.data);
-    };
-    ```
-  - Python:
-    ```python
-    import asyncio
-    import websockets
-    
-    async def connect():
-        uri = "wss://cdbackend.onrender.com/ws/detections"
-        async with websockets.connect(uri) as websocket:
-            while True:
-                message = await websocket.recv()
-                print(f"Received: {message}")
-    
-    asyncio.run(connect())
-    ```
-
-### Real-Time Video Stream
-
-- **URL**: `/ws/video`
-- **WebSocket Protocol**: `ws://` (local) or `wss://` (production)
-- **Description**: Streams video frames from the traffic camera at approximately 30 FPS.
-- **Response Format**: JSON containing base64-encoded JPEG image.
+- **URL**: `/streams`
+- **Method**: `GET`
+- **Description**: Returns a list of configured streams with their ID, location, and current status.
+- **Success Response (200)**:
   ```json
   {
-    "frame": "base64EncodedImageData..."
+    "streams": [
+      {
+        "id": "mn_c550",
+        "location": "MN Hwy 55 at Hwy 100",
+        "status": "success"
+      },
+      {
+        "id": "fallback_example",
+        "location": "Fallback Test Camera",
+        "status": "initializing"
+      }
+    ]
+  }
+  ```
+- **Example**:
+  ```bash
+  curl http://localhost:8000/streams
+  ```
+
+### Get Latest Frame for a Stream
+
+- **URL**: `/stream/{stream_id}/frame`
+- **Method**: `GET`
+- **Path Parameter**: `stream_id` (string, required) - The ID of the desired stream (e.g., `mn_c550`).
+- **Description**: Returns the latest captured frame for the specified stream as a base64 encoded JPEG string.
+- **Success Response (200)**:
+  ```json
+  {
+    "stream_id": "mn_c550",
+    "frame": "/9j/4AAQSkZJRgABAQE... (base64 encoded image data)"
+  }
+  ```
+- **Success Response (200 - Frame Temporarily Unavailable)**:
+  ```json
+  {
+      "stream_id": "mn_c550",
+      "frame": null,
+      "message": "Frame currently unavailable"
+  }
+  ```
+- **Error Response (404 - Stream Not Found)**:
+  ```json
+  {
+    "detail": "Stream 'invalid_id' not found."
+  }
+  ```
+- **Error Response (404 - No Frame Yet)**:
+  ```json
+  {
+      "detail": "No frame available yet for stream 'mn_c550'."
+  }
+  ```
+- **Example**:
+  ```bash
+  curl http://localhost:8000/stream/mn_c550/frame
+  ```
+
+### Get Latest Detection for a Stream
+
+- **URL**: `/stream/{stream_id}/detect`
+- **Method**: `GET`
+- **Path Parameter**: `stream_id` (string, required) - The ID of the desired stream.
+- **Description**: Returns the latest accident detection result for the specified stream.
+- **Success Response (200)**:
+  ```json
+  {
+    "stream_id": "mn_c550",
+    "detection": {
+      "status": "success",
+      "result": "no_accident", // or "accident"
+      "description": null, // or "Brief description of the accident..."
+      "timestamp": "2023-10-27T10:30:00.123456+00:00", // ISO 8601 format
+      "location": "MN Hwy 55 at Hwy 100"
+    }
+  }
+  ```
+- **Error Response (404 - Stream Not Found)**:
+  ```json
+  {
+    "detail": "Stream 'invalid_id' not found."
+  }
+  ```
+- **Example**:
+  ```bash
+  curl http://localhost:8000/stream/mn_c550/detect
+  ```
+
+## WebSocket Endpoint
+
+### Combined Stream Data
+
+- **URL**: `/ws/stream/{stream_id}`
+- **WebSocket Protocol**: `ws://` (local) or `wss://` (production)
+- **Path Parameter**: `stream_id` (string, required) - The ID of the stream to connect to.
+- **Description**: Establishes a WebSocket connection for a specific stream. The server pushes combined data messages containing the latest video frame and the latest detection result at the `stream_fps` defined in the configuration.
+- **Message Format (Server -> Client)**: JSON object
+  ```json
+  {
+    "frame": "/9j/4AAQSkZJRgABAQE... (base64 encoded image data or null)",
+    "detection": {
+      "status": "success", // "initializing", "no_frame", "error"
+      "result": "no_accident", // or "accident"
+      "description": null, // or "Brief description..."
+      "timestamp": "2023-10-27T10:30:00.123456+00:00", // ISO 8601 format of last detection attempt
+      "location": "MN Hwy 55 at Hwy 100",
+      "error_message": null // or "Details about the error if status is 'error'"
+    }
   }
   ```
 - **Connection Example**:
   - Browser:
     ```javascript
-    const socket = new WebSocket("wss://cdbackend.onrender.com/ws/video");
-    const videoElement = document.getElementById('videoFeed');
-    
+    const streamId = "mn_c550"; // Or get from user input/config
+    const wsUrl = `wss://your-service-name.onrender.com/ws/stream/${streamId}`;
+    const socket = new WebSocket(wsUrl);
+    const videoElement = document.getElementById('videoFeed'); // Assuming an <img> tag
+    const detectionElement = document.getElementById('detectionStatus'); // Assuming a <div> or <p> tag
+
+    socket.onopen = () => {
+      console.log(`WebSocket connected to stream: ${streamId}`);
+    };
+
     socket.onmessage = (event) => {
       try {
         const data = JSON.parse(event.data);
+        
+        // Update video frame
         if (data.frame) {
           videoElement.src = `data:image/jpeg;base64,${data.frame}`;
+        } else {
+          // Handle missing frame (e.g., show placeholder)
+          // videoElement.src = 'placeholder.jpg'; 
         }
+
+        // Update detection status
+        if (data.detection) {
+           const detection = data.detection;
+           let statusText = `Status: ${detection.status}, Result: ${detection.result}`;
+           if (detection.result === 'accident' && detection.description) {
+               statusText += ` | Desc: ${detection.description}`;
+           }
+           statusText += ` | Location: ${detection.location}`;
+           statusText += ` | Time: ${detection.timestamp}`;
+           detectionElement.textContent = statusText;
+           // Add visual cues based on detection.result (e.g., change background color)
+        }
+
       } catch (error) {
-        console.error("Error parsing video data:", error);
+        console.error("Error parsing WebSocket message:", error);
       }
     };
-    ```
-  - Python:
-    ```python
-    import asyncio
-    import json
-    import websockets
-    import base64
-    from PIL import Image
-    import io
-    
-    async def connect_video():
-        uri = "wss://cdbackend.onrender.com/ws/video"
-        async with websockets.connect(uri) as websocket:
-            while True:
-                message = await websocket.recv()
-                data = json.loads(message)
-                if "frame" in data:
-                    # Convert base64 to image
-                    image_data = base64.b64decode(data["frame"])
-                    image = Image.open(io.BytesIO(image_data))
-                    # Process image as needed
-                    image.save(f"latest_frame.jpg")
-                    print("Received new frame")
-    
-    asyncio.run(connect_video())
+
+    socket.onerror = (error) => {
+        console.error("WebSocket Error:", error);
+    };
+
+    socket.onclose = (event) => {
+        console.log("WebSocket closed:", event.code, event.reason);
+        // Optionally implement reconnection logic here
+    };
     ```
 
 ## Implementation Details
 
-### Technical Architecture
-
-1. **Frame Extraction**: 
-   - Uses ffmpeg to extract frames from the HLS stream at 30 FPS for video and 5 FPS for analysis
-   - Updates a single JPEG file continuously rather than storing multiple files
-   - Runs in a background thread to avoid blocking the main application
-
-2. **Image Classification**:
-   - Together LLaMA Vision model classifies each frame as "accident" or "no accident"
-   - Only processes new frames when they're available (checks file modification time)
-   - Caches the last result to avoid unnecessary processing
-
-3. **WebSocket Broadcast**:
-   - Separate WebSocket endpoints for video streaming and accident detection
-   - Video stream runs at higher framerate (30 FPS) than accident detection (5 FPS)
-   - Efficiently handles connection management and dead connection cleanup
-
-### Performance Considerations
-
-- The video stream runs at approximately 30 frames per second
-- The accident detection runs at approximately 5 frames per second (200ms intervals)
-- The HLS video stream URL is configured in `accident_detector.py` as `VIDEO_SOURCE`
-- No authentication is currently required for accessing the endpoints
-- Free tier deployments on Render.com will spin down with inactivity (may cause ~50s delay on first access)
-
-## Testing
-
-A browser-based test client is available in `client_example.html` that connects to both WebSocket endpoints and displays real-time video and detection results. 
+- **Configuration**: Stream sources are defined in `streams_config.py`.
+- **Processing**: Each stream is handled by a separate `VideoStreamProcessor` instance in background threads.
+- **Frame Extraction**: Uses `ffmpeg` for HLS streams or downloads static images for fallback sources.
+- **Detection**: Uses Together AI LLaMA Vision model. First classifies ('accident'/'no_accident'), then describes if an accident is found.
+- **Timing**: 
+    - Video frames are streamed via WebSocket at `stream_fps`.
+    - Accident detection/description runs independently at `analysis_fps`.
+    - The WebSocket message includes the *latest available* frame and the *latest available* detection result.
+- **Logging**: General logs go to console. Detected accidents are logged with details to `logs/accidents.log`.
