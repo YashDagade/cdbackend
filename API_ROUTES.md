@@ -59,9 +59,27 @@ This document outlines all available API endpoints for the Real-Time Accident De
 
 ## Implementation Details
 
+### Technical Architecture
+
+1. **Frame Extraction**: 
+   - Uses ffmpeg to extract frames from the HLS stream at 5 FPS
+   - Updates a single JPEG file continuously rather than storing multiple files
+   - Runs in a background thread to avoid blocking the main application
+
+2. **Image Classification**:
+   - Together LLaMA Vision model classifies each frame as "accident" or "no accident"
+   - Only processes new frames when they're available (checks file modification time)
+   - Caches the last result to avoid unnecessary processing
+
+3. **WebSocket Broadcast**:
+   - A single background task processes frames and broadcasts to all connected clients
+   - Supports multiple simultaneous WebSocket connections
+   - Efficiently handles connection management and dead connection cleanup
+
+### Performance Considerations
+
 - The detection runs at approximately 5 frames per second (200ms intervals)
-- Each frame is classified by the Together LLaMA Vision model
-- The video source is configured in `accident_detector.py`
+- The HLS video stream URL is configured in `accident_detector.py` as `VIDEO_SOURCE`
 - No authentication is currently required for accessing the endpoints
 - Free tier deployments on Render.com will spin down with inactivity (may cause ~50s delay on first access)
 
