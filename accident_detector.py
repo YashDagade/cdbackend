@@ -5,9 +5,19 @@ import time
 import threading
 from together import Together
 from pathlib import Path
+import urllib.request
+import random
 
 # Your HLS URL (master or media playlist)
 VIDEO_SOURCE = "https://511mn.org/path/to/your/chunklist_w872956871.m3u8"
+
+# Fallback video sources (public traffic cameras for testing)
+FALLBACK_SOURCES = [
+    "https://511ev.org/cameras/latest/R1_167_St_Louis_River.jpg",
+    "https://511ev.org/cameras/latest/R1_21_Thompson_Hill.jpg",
+    "https://511ev.org/cameras/latest/R1_13_Mesaba.jpg",
+    "https://511ev.org/cameras/latest/R1_172_North_Shore.jpg"
+]
 
 # Initialize Together client once
 together_client = Together(api_key=os.environ.get("TOGETHER_API_KEY", "00cc911924ea837d3ce1d2209d6c03de690ce4757edb8edabff68bbf681b42a6"))
@@ -18,7 +28,7 @@ PROMPT = (
 
 # Frame extraction settings
 ANALYSIS_FPS = 5  # Rate for accident detection
-VIDEO_FPS = 30    # Rate for video streaming
+VIDEO_FPS = 10    # Rate for video streaming (reduced to conserve bandwidth)
 FRAMES_DIR = "frames"
 
 # Create frames directory
@@ -31,46 +41,101 @@ last_frame_time = 0
 last_result = "no accident"
 last_frame_data = None
 last_frame_base64 = None
+use_fallback = True
+fallback_index = 0
+
+def get_fallback_frame():
+    """
+    Download a frame from fallback source when HLS stream is unavailable
+    """
+    global fallback_index
+    
+    # Rotate through fallback sources
+    source = FALLBACK_SOURCES[fallback_index % len(FALLBACK_SOURCES)]
+    fallback_index += 1
+    
+    try:
+        # Add a random parameter to avoid caching
+        url = f"{source}?nocache={int(time.time())}"
+        print(f"Downloading fallback frame from: {url}")
+        
+        # Download the image
+        urllib.request.urlretrieve(url, CURRENT_FRAME_PATH)
+        return True
+    except Exception as e:
+        print(f"Error downloading fallback frame: {e}")
+        return False
 
 def start_frame_extraction():
     """
     Start ffmpeg process to continuously extract frames from the stream
     """
-    global extraction_running
+    global extraction_running, use_fallback
     
     if extraction_running:
         return
     
     extraction_running = True
     
-    # Use ffmpeg to continuously update a single image file at high FPS
-    cmd = [
-        "ffmpeg",
-        "-i", VIDEO_SOURCE,
-        "-vf", f"fps={VIDEO_FPS}",
-        "-q:v", "2",  # JPEG quality (2 is high quality)
-        "-update", "1",
-        "-y", CURRENT_FRAME_PATH
-    ]
-    
-    # Run in a separate thread to not block the main process
-    def run_ffmpeg():
+    # Try to use ffmpeg with HLS stream first
+    if not use_fallback:
         try:
-            subprocess.run(cmd, stderr=subprocess.PIPE)
+            # Use ffmpeg to continuously update a single image file at high FPS
+            cmd = [
+                "ffmpeg",
+                "-i", VIDEO_SOURCE,
+                "-vf", f"fps={VIDEO_FPS}",
+                "-q:v", "2",  # JPEG quality (2 is high quality)
+                "-update", "1",
+                "-y", CURRENT_FRAME_PATH
+            ]
+            
+            # Run in a separate thread to not block the main process
+            def run_ffmpeg():
+                try:
+                    result = subprocess.run(cmd, stderr=subprocess.PIPE, timeout=10)
+                    # If ffmpeg fails, switch to fallback
+                    if result.returncode != 0:
+                        global use_fallback
+                        use_fallback = True
+                        print(f"ffmpeg failed, switching to fallback. Error: {result.stderr.decode('utf-8')}")
+                except Exception as e:
+                    print(f"Error in frame extraction: {e}")
+                    use_fallback = True
+                finally:
+                    global extraction_running
+                    extraction_running = False
+            
+            threading.Thread(target=run_ffmpeg, daemon=True).start()
+            print(f"Started frame extraction from {VIDEO_SOURCE} at {VIDEO_FPS} FPS")
+            return
         except Exception as e:
-            print(f"Error in frame extraction: {e}")
-        finally:
-            global extraction_running
-            extraction_running = False
+            print(f"Failed to start ffmpeg: {e}")
+            use_fallback = True
     
-    threading.Thread(target=run_ffmpeg, daemon=True).start()
-    print(f"Started frame extraction from {VIDEO_SOURCE} at {VIDEO_FPS} FPS")
+    # If we're here, use the fallback method
+    if use_fallback:
+        def fallback_loop():
+            try:
+                while True:
+                    success = get_fallback_frame()
+                    if not success:
+                        print("Failed to get fallback frame, retrying...")
+                    time.sleep(1.0 / VIDEO_FPS)  # Maintain requested FPS
+            except Exception as e:
+                print(f"Error in fallback loop: {e}")
+            finally:
+                global extraction_running
+                extraction_running = False
+        
+        threading.Thread(target=fallback_loop, daemon=True).start()
+        print(f"Started fallback frame extraction at {VIDEO_FPS} FPS")
 
 def get_current_frame():
     """
     Get the current frame as base64 for streaming purposes
     """
-    global last_frame_data, last_frame_base64
+    global last_frame_data, last_frame_base64, last_frame_time
     
     try:
         frame_path = Path(CURRENT_FRAME_PATH)
@@ -78,7 +143,14 @@ def get_current_frame():
         if not frame_path.exists():
             if last_frame_base64:
                 return last_frame_base64
-            return None
+            
+            # Try to get a fallback frame since none exists
+            if get_fallback_frame():
+                # Continue with the newly created file
+                if not frame_path.exists():
+                    return None
+            else:
+                return None
         
         # Get the modification time of the frame file
         mod_time = frame_path.stat().st_mtime
@@ -107,7 +179,7 @@ def detect_frame_accident():
     # Start frame extraction if not already running
     if not extraction_running:
         start_frame_extraction()
-        # Give ffmpeg a moment to start producing frames
+        # Give it a moment to start producing frames
         time.sleep(1)
     
     # Get latest frame as base64
