@@ -57,12 +57,66 @@ This document outlines all available API endpoints for the Real-Time Accident De
     asyncio.run(connect())
     ```
 
+### Real-Time Video Stream
+
+- **URL**: `/ws/video`
+- **WebSocket Protocol**: `ws://` (local) or `wss://` (production)
+- **Description**: Streams video frames from the traffic camera at approximately 30 FPS.
+- **Response Format**: JSON containing base64-encoded JPEG image.
+  ```json
+  {
+    "frame": "base64EncodedImageData..."
+  }
+  ```
+- **Connection Example**:
+  - Browser:
+    ```javascript
+    const socket = new WebSocket("wss://cdbackend.onrender.com/ws/video");
+    const videoElement = document.getElementById('videoFeed');
+    
+    socket.onmessage = (event) => {
+      try {
+        const data = JSON.parse(event.data);
+        if (data.frame) {
+          videoElement.src = `data:image/jpeg;base64,${data.frame}`;
+        }
+      } catch (error) {
+        console.error("Error parsing video data:", error);
+      }
+    };
+    ```
+  - Python:
+    ```python
+    import asyncio
+    import json
+    import websockets
+    import base64
+    from PIL import Image
+    import io
+    
+    async def connect_video():
+        uri = "wss://cdbackend.onrender.com/ws/video"
+        async with websockets.connect(uri) as websocket:
+            while True:
+                message = await websocket.recv()
+                data = json.loads(message)
+                if "frame" in data:
+                    # Convert base64 to image
+                    image_data = base64.b64decode(data["frame"])
+                    image = Image.open(io.BytesIO(image_data))
+                    # Process image as needed
+                    image.save(f"latest_frame.jpg")
+                    print("Received new frame")
+    
+    asyncio.run(connect_video())
+    ```
+
 ## Implementation Details
 
 ### Technical Architecture
 
 1. **Frame Extraction**: 
-   - Uses ffmpeg to extract frames from the HLS stream at 5 FPS
+   - Uses ffmpeg to extract frames from the HLS stream at 30 FPS for video and 5 FPS for analysis
    - Updates a single JPEG file continuously rather than storing multiple files
    - Runs in a background thread to avoid blocking the main application
 
@@ -72,17 +126,18 @@ This document outlines all available API endpoints for the Real-Time Accident De
    - Caches the last result to avoid unnecessary processing
 
 3. **WebSocket Broadcast**:
-   - A single background task processes frames and broadcasts to all connected clients
-   - Supports multiple simultaneous WebSocket connections
+   - Separate WebSocket endpoints for video streaming and accident detection
+   - Video stream runs at higher framerate (30 FPS) than accident detection (5 FPS)
    - Efficiently handles connection management and dead connection cleanup
 
 ### Performance Considerations
 
-- The detection runs at approximately 5 frames per second (200ms intervals)
+- The video stream runs at approximately 30 frames per second
+- The accident detection runs at approximately 5 frames per second (200ms intervals)
 - The HLS video stream URL is configured in `accident_detector.py` as `VIDEO_SOURCE`
 - No authentication is currently required for accessing the endpoints
 - Free tier deployments on Render.com will spin down with inactivity (may cause ~50s delay on first access)
 
 ## Testing
 
-A browser-based test client is available in `client_example.html` that connects to the WebSocket endpoint and displays real-time detection results. 
+A browser-based test client is available in `client_example.html` that connects to both WebSocket endpoints and displays real-time video and detection results. 

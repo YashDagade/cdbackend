@@ -3,13 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Accident Detector Client</title>
+    <title>Traffic Accident Detector</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            max-width: 800px;
+            max-width: 900px;
             margin: 0 auto;
             padding: 20px;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .video-container {
+            width: 100%;
+            text-align: center;
+        }
+        #videoFeed {
+            max-width: 100%;
+            border: 2px solid #333;
+            background-color: #eee;
+            height: 400px;
         }
         .status {
             font-size: 24px;
@@ -28,49 +43,94 @@
             color: #006600;
         }
         .log {
-            height: 200px;
+            height: 150px;
             overflow-y: auto;
             border: 1px solid #ccc;
             padding: 10px;
-            margin-top: 20px;
             font-family: monospace;
+            font-size: 12px;
+        }
+        .connection-status {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+        .connected {
+            background-color: #00cc00;
+        }
+        .disconnected {
+            background-color: #cc0000;
         }
         button {
             padding: 10px 15px;
-            margin: 10px 0;
+            margin: 10px 5px;
+            cursor: pointer;
+        }
+        .connection-controls {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
         }
     </style>
 </head>
 <body>
-    <h1>Accident Detector Client</h1>
+    <h1>Traffic Accident Detector</h1>
     
-    <div id="connection-controls">
-        <button id="connect">Connect</button>
-        <button id="disconnect" disabled>Disconnect</button>
+    <div class="container">
+        <div class="connection-controls">
+            <button id="connectAll">Connect All</button>
+            <button id="disconnectAll" disabled>Disconnect All</button>
+        </div>
+        
+        <div class="video-container">
+            <div class="connection-status">
+                <div class="status-indicator disconnected" id="videoStatus"></div>
+                <span>Video Stream:</span>
+            </div>
+            <img id="videoFeed" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=" alt="Video Feed">
+        </div>
+        
+        <div>
+            <div class="connection-status">
+                <div class="status-indicator disconnected" id="detectionStatus"></div>
+                <span>Accident Detection:</span>
+            </div>
+            <div class="status" id="accidentStatus">Disconnected</div>
+        </div>
+        
+        <div>
+            <h3>Log</h3>
+            <div class="log" id="log"></div>
+        </div>
     </div>
     
-    <div class="status" id="status">Disconnected</div>
-    
-    <div class="log" id="log"></div>
-    
     <script>
-        let socket;
-        const connectBtn = document.getElementById('connect');
-        const disconnectBtn = document.getElementById('disconnect');
-        const statusDiv = document.getElementById('status');
+        // DOM elements
+        const connectAllBtn = document.getElementById('connectAll');
+        const disconnectAllBtn = document.getElementById('disconnectAll');
+        const videoFeed = document.getElementById('videoFeed');
+        const accidentStatusDiv = document.getElementById('accidentStatus');
+        const videoStatusIndicator = document.getElementById('videoStatus');
+        const detectionStatusIndicator = document.getElementById('detectionStatus');
         const logDiv = document.getElementById('log');
         
-        function updateStatus(message) {
-            statusDiv.textContent = message;
-            statusDiv.className = 'status';
-            
-            if (message === 'accident') {
-                statusDiv.classList.add('accident');
-            } else if (message === 'no accident') {
-                statusDiv.classList.add('no-accident');
-            }
-        }
+        // WebSocket connections
+        let videoSocket = null;
+        let detectionSocket = null;
         
+        // Last received frame timestamp for FPS calculation
+        let lastFrameTime = 0;
+        let frameCount = 0;
+        let fpsUpdateInterval = null;
+        
+        // Log a message to the log div
         function log(message) {
             const entry = document.createElement('div');
             entry.textContent = `${new Date().toLocaleTimeString()}: ${message}`;
@@ -78,52 +138,174 @@
             logDiv.scrollTop = logDiv.scrollHeight;
         }
         
-        connectBtn.addEventListener('click', () => {
-            // Change to your actual WebSocket URL
-            const wsUrl = window.location.hostname === 'localhost' 
-                ? 'ws://localhost:10000/ws/detections'
-                : 'wss://cdbackend.onrender.com/ws/detections';
-                
+        // Update accident status display
+        function updateAccidentStatus(message) {
+            accidentStatusDiv.textContent = message;
+            accidentStatusDiv.className = 'status';
+            
+            if (message === 'accident') {
+                accidentStatusDiv.classList.add('accident');
+            } else if (message === 'no accident') {
+                accidentStatusDiv.classList.add('no-accident');
+            }
+        }
+        
+        // Update connection status indicators
+        function updateConnectionStatus(type, isConnected) {
+            const indicator = type === 'video' ? videoStatusIndicator : detectionStatusIndicator;
+            
+            if (isConnected) {
+                indicator.classList.remove('disconnected');
+                indicator.classList.add('connected');
+            } else {
+                indicator.classList.remove('connected');
+                indicator.classList.add('disconnected');
+            }
+        }
+        
+        // Check if all connections are active
+        function checkAllConnections() {
+            const allConnected = videoSocket && detectionSocket;
+            connectAllBtn.disabled = allConnected;
+            disconnectAllBtn.disabled = !allConnected;
+        }
+        
+        // Connect to video WebSocket
+        function connectVideoSocket() {
+            // Base WebSocket URL based on current location
+            const wsBase = window.location.hostname === 'localhost' 
+                ? 'ws://localhost:10000'
+                : 'wss://cdbackend.onrender.com';
+            
             try {
-                socket = new WebSocket(wsUrl);
+                videoSocket = new WebSocket(`${wsBase}/ws/video`);
                 
-                socket.onopen = () => {
-                    log('Connected to WebSocket server');
-                    connectBtn.disabled = true;
-                    disconnectBtn.disabled = false;
-                    updateStatus('Connected - Waiting for data...');
+                videoSocket.onopen = () => {
+                    log('Connected to video WebSocket');
+                    updateConnectionStatus('video', true);
+                    checkAllConnections();
+                    
+                    // Start FPS counter
+                    lastFrameTime = Date.now();
+                    frameCount = 0;
+                    fpsUpdateInterval = setInterval(() => {
+                        const now = Date.now();
+                        const elapsed = (now - lastFrameTime) / 1000;
+                        const fps = frameCount / elapsed;
+                        log(`Video FPS: ${fps.toFixed(1)}`);
+                        lastFrameTime = now;
+                        frameCount = 0;
+                    }, 5000);
                 };
                 
-                socket.onmessage = (event) => {
-                    const message = event.data;
-                    log(`Received: ${message}`);
-                    updateStatus(message);
+                videoSocket.onmessage = (event) => {
+                    frameCount++;
+                    try {
+                        const data = JSON.parse(event.data);
+                        if (data.frame) {
+                            videoFeed.src = `data:image/jpeg;base64,${data.frame}`;
+                        }
+                    } catch (e) {
+                        log(`Error parsing video data: ${e.message}`);
+                    }
                 };
                 
-                socket.onclose = () => {
-                    log('Disconnected from WebSocket server');
-                    connectBtn.disabled = false;
-                    disconnectBtn.disabled = true;
-                    updateStatus('Disconnected');
+                videoSocket.onclose = () => {
+                    log('Disconnected from video WebSocket');
+                    updateConnectionStatus('video', false);
+                    videoSocket = null;
+                    checkAllConnections();
+                    
+                    if (fpsUpdateInterval) {
+                        clearInterval(fpsUpdateInterval);
+                        fpsUpdateInterval = null;
+                    }
                 };
                 
-                socket.onerror = (error) => {
-                    log(`WebSocket error: ${error}`);
-                    connectBtn.disabled = false;
-                    disconnectBtn.disabled = true;
+                videoSocket.onerror = (error) => {
+                    log(`Video WebSocket error`);
+                    updateConnectionStatus('video', false);
                 };
             } catch (error) {
                 log(`Error: ${error.message}`);
             }
-        });
+        }
         
-        disconnectBtn.addEventListener('click', () => {
-            if (socket) {
-                socket.close();
-                connectBtn.disabled = false;
-                disconnectBtn.disabled = true;
+        // Connect to detection WebSocket
+        function connectDetectionSocket() {
+            // Base WebSocket URL based on current location
+            const wsBase = window.location.hostname === 'localhost' 
+                ? 'ws://localhost:10000'
+                : 'wss://cdbackend.onrender.com';
+            
+            try {
+                detectionSocket = new WebSocket(`${wsBase}/ws/detections`);
+                
+                detectionSocket.onopen = () => {
+                    log('Connected to detection WebSocket');
+                    updateConnectionStatus('detection', true);
+                    updateAccidentStatus('Connected - Waiting for data...');
+                    checkAllConnections();
+                };
+                
+                detectionSocket.onmessage = (event) => {
+                    const message = event.data;
+                    log(`Detection: ${message}`);
+                    updateAccidentStatus(message);
+                };
+                
+                detectionSocket.onclose = () => {
+                    log('Disconnected from detection WebSocket');
+                    updateConnectionStatus('detection', false);
+                    updateAccidentStatus('Disconnected');
+                    detectionSocket = null;
+                    checkAllConnections();
+                };
+                
+                detectionSocket.onerror = (error) => {
+                    log(`Detection WebSocket error`);
+                    updateConnectionStatus('detection', false);
+                };
+            } catch (error) {
+                log(`Error: ${error.message}`);
             }
-        });
+        }
+        
+        // Connect all WebSockets
+        function connectAll() {
+            if (!videoSocket) connectVideoSocket();
+            if (!detectionSocket) connectDetectionSocket();
+        }
+        
+        // Disconnect all WebSockets
+        function disconnectAll() {
+            if (videoSocket) {
+                videoSocket.close();
+                videoSocket = null;
+            }
+            
+            if (detectionSocket) {
+                detectionSocket.close();
+                detectionSocket = null;
+            }
+            
+            updateConnectionStatus('video', false);
+            updateConnectionStatus('detection', false);
+            updateAccidentStatus('Disconnected');
+            checkAllConnections();
+            
+            if (fpsUpdateInterval) {
+                clearInterval(fpsUpdateInterval);
+                fpsUpdateInterval = null;
+            }
+        }
+        
+        // Event listeners for buttons
+        connectAllBtn.addEventListener('click', connectAll);
+        disconnectAllBtn.addEventListener('click', disconnectAll);
+        
+        // Log initial message
+        log('Client loaded. Click "Connect All" to start.');
     </script>
 </body>
 </html> 
