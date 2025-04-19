@@ -3,4 +3,5 @@ uvicorn[standard]
 opencv-python-headless
 together
 python-multipart
-websockets 
+websockets
+requests 

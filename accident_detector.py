@@ -3,13 +3,15 @@ import subprocess
 import base64
 import time
 import threading
+import requests
 from together import Together
 from pathlib import Path
 import urllib.request
 import random
+import json
 
-# Your HLS URL (master or media playlist)
-VIDEO_SOURCE = "https://511mn.org/path/to/your/chunklist_w872956871.m3u8"
+# Your HLS URL from Minnesota DOT
+VIDEO_SOURCE = "https://video.dot.state.mn.us/public/C550.stream/chunklist_w780326163.m3u8"
 
 # Fallback video sources (public traffic cameras for testing)
 FALLBACK_SOURCES = [
@@ -41,8 +43,22 @@ last_frame_time = 0
 last_result = "no accident"
 last_frame_data = None
 last_frame_base64 = None
-use_fallback = True
+use_fallback = False
 fallback_index = 0
+
+def validate_m3u8_url():
+    """
+    Validate that the M3U8 URL is accessible
+    """
+    try:
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.114 Safari/537.36'
+        }
+        response = requests.head(VIDEO_SOURCE, headers=headers, timeout=5)
+        return response.status_code == 200
+    except Exception as e:
+        print(f"Error validating M3U8 URL: {e}")
+        return False
 
 def get_fallback_frame():
     """
@@ -77,12 +93,14 @@ def start_frame_extraction():
     
     extraction_running = True
     
-    # Try to use ffmpeg with HLS stream first
-    if not use_fallback:
+    # Check if the M3U8 URL is valid
+    if not use_fallback and validate_m3u8_url():
         try:
             # Use ffmpeg to continuously update a single image file at high FPS
             cmd = [
                 "ffmpeg",
+                "-headers", "User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36",
+                "-protocol_whitelist", "file,http,https,tcp,tls",
                 "-i", VIDEO_SOURCE,
                 "-vf", f"fps={VIDEO_FPS}",
                 "-q:v", "2",  # JPEG quality (2 is high quality)
@@ -93,7 +111,8 @@ def start_frame_extraction():
             # Run in a separate thread to not block the main process
             def run_ffmpeg():
                 try:
-                    result = subprocess.run(cmd, stderr=subprocess.PIPE, timeout=10)
+                    print(f"Starting ffmpeg with command: {' '.join(cmd)}")
+                    result = subprocess.run(cmd, stderr=subprocess.PIPE)
                     # If ffmpeg fails, switch to fallback
                     if result.returncode != 0:
                         global use_fallback
@@ -112,6 +131,8 @@ def start_frame_extraction():
         except Exception as e:
             print(f"Failed to start ffmpeg: {e}")
             use_fallback = True
+    else:
+        use_fallback = True
     
     # If we're here, use the fallback method
     if use_fallback:
@@ -186,7 +207,7 @@ def detect_frame_accident():
     img_b64 = get_current_frame()
     if not img_b64:
         print("No frame available yet")
-        return last_result
+        return json.dumps({"status": "error", "message": "No frame available", "result": last_result})
     
     try:
         # Call the Together Vision model (sync)
@@ -203,9 +224,19 @@ def detect_frame_accident():
         
         # Extract and normalize reply
         text = response.choices[0].message.content.strip().lower()
-        last_result = text if text in ("accident", "no accident") else "no accident"
-        return last_result
+        result = "accident" if "accident" in text and "no accident" not in text else "no accident"
+        last_result = result
+        
+        return json.dumps({
+            "status": "success",
+            "result": result,
+            "original_response": text
+        })
         
     except Exception as e:
         print(f"Error processing frame: {e}")
-        return last_result 
+        return json.dumps({
+            "status": "error",
+            "message": str(e),
+            "result": last_result
+        }) 

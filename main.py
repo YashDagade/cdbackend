@@ -31,6 +31,7 @@ async def detection_broadcast_loop():
                 dead_connections = set()
                 for connection in detection_connections:
                     try:
+                        # result is already a JSON string from the detector
                         await connection.send_text(result)
                     except Exception as e:
                         logger.error(f"Failed to send detection to connection: {e}")
@@ -119,6 +120,26 @@ app = FastAPI(
 def health_check():
     """Basic health check endpoint"""
     return {"status": "ok"}
+
+@app.get("/frame")
+async def get_latest_frame():
+    """Get the latest frame as a base64 encoded string"""
+    frame_base64 = await asyncio.get_event_loop().run_in_executor(
+        None, get_current_frame
+    )
+    if frame_base64:
+        return {"frame": frame_base64}
+    else:
+        return {"error": "No frame available"}
+
+@app.get("/detect")
+async def detect_accident():
+    """Run accident detection on the latest frame"""
+    result = await asyncio.get_event_loop().run_in_executor(
+        None, detect_frame_accident
+    )
+    # Parse the JSON string into a dictionary
+    return json.loads(result)
 
 @app.websocket("/ws/detections")
 async def ws_detections(ws: WebSocket):
