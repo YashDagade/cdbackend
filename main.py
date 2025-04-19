@@ -5,6 +5,7 @@ import time
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect, HTTPException
 from fastapi.responses import JSONResponse
+from fastapi.middleware.cors import CORSMiddleware
 from collections import defaultdict
 
 # Import configurations and the processor
@@ -142,6 +143,26 @@ app = FastAPI(
     description="Real-time traffic accident detection and video streaming for multiple sources.",
     lifespan=lifespan
 )
+
+# --- Add CORS Middleware --- 
+# origins = [
+#     "http://localhost",          # Allow local frontend dev
+#     "http://localhost:8000",     # Allow local frontend dev on specific port
+#     "https://your-render-app-name.onrender.com", # Allow your Render frontend
+#     # Add any other origins as needed
+# ]
+
+# For simpler deployment/testing on Render, allow all origins:
+origins = ["*"] 
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True, # Allow cookies if needed (might not be necessary for WebSockets)
+    allow_methods=["*"],    # Allow all methods (GET, POST, etc.)
+    allow_headers=["*"],    # Allow all headers
+)
+# -------
 
 # --- REST Endpoints ---
 @app.get("/")
