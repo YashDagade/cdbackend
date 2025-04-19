@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accident Detector Client</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        #status {
+            font-weight: bold;
+            font-size: 24px;
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .accident {
+            background-color: #ffcccc;
+            color: #cc0000;
+        }
+        .no-accident {
+            background-color: #ccffcc;
+            color: #006600;
+        }
+        #log {
+            height: 200px;
+            overflow-y: scroll;
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-top: 20px;
+            font-family: monospace;
+        }
+        .controls {
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Real-Time Accident Detector</h1>
+    <div class="controls">
+        <input type="text" id="wsUrl" value="ws://localhost:10000/ws/detections" style="width: 300px;">
+        <button id="connect">Connect</button>
+        <button id="disconnect" disabled>Disconnect</button>
+    </div>
+    
+    <div id="status">Waiting for connection...</div>
+    
+    <div>
+        <h3>Event Log:</h3>
+        <div id="log"></div>
+    </div>
+
+    <script>
+        let socket;
+        const connectBtn = document.getElementById('connect');
+        const disconnectBtn = document.getElementById('disconnect');
+        const statusDiv = document.getElementById('status');
+        const logDiv = document.getElementById('log');
+        const wsUrlInput = document.getElementById('wsUrl');
+
+        function appendToLog(message) {
+            const timestamp = new Date().toLocaleTimeString();
+            logDiv.innerHTML += `[${timestamp}] ${message}<br>`;
+            logDiv.scrollTop = logDiv.scrollHeight;
+        }
+
+        function updateStatus(message, isAccident) {
+            statusDiv.textContent = message;
+            statusDiv.className = isAccident ? 'accident' : 'no-accident';
+        }
+
+        connectBtn.addEventListener('click', () => {
+            const wsUrl = wsUrlInput.value;
+            
+            socket = new WebSocket(wsUrl);
+            
+            socket.onopen = function(e) {
+                connectBtn.disabled = true;
+                disconnectBtn.disabled = false;
+                updateStatus('Connected, waiting for data...', false);
+                appendToLog('WebSocket connection established');
+            };
+            
+            socket.onmessage = function(event) {
+                const data = event.data;
+                appendToLog(`Received: ${data}`);
+                
+                if (data === 'accident') {
+                    updateStatus('⚠️ ACCIDENT DETECTED ⚠️', true);
+                } else {
+                    updateStatus('No accident detected', false);
+                }
+            };
+            
+            socket.onclose = function(event) {
+                connectBtn.disabled = false;
+                disconnectBtn.disabled = true;
+                updateStatus('Disconnected', false);
+                appendToLog('WebSocket connection closed');
+            };
+            
+            socket.onerror = function(error) {
+                appendToLog(`WebSocket error: ${error}`);
+                connectBtn.disabled = false;
+                disconnectBtn.disabled = true;
+            };
+        });
+        
+        disconnectBtn.addEventListener('click', () => {
+            if (socket) {
+                socket.close();
+                connectBtn.disabled = false;
+                disconnectBtn.disabled = true;
+            }
+        });
+    </script>
+</body>
+</html> 

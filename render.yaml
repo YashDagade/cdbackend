@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: accident-detector
+    env: docker
+    plan: free
+    dockerfilePath: Dockerfile
+    buildCommand: ""
+    startCommand: uvicorn main:app --host 0.0.0.0 --port 10000
+    envVars:
+      - key: TOGETHER_API_KEY
+        fromSecret: TOGETHER_API_KEY
