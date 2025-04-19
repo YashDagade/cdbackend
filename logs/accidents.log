@@ -1,0 +1,131 @@
+2025-04-19 15:54:21,431 - AccidentLog - INFO - Accident Detected - Stream: mn_c550, Location: MN Hwy 55 at Hwy 100, Time: 2025-04-19T19:54:19.807231+00:00, Description: The accident appears to involve a white truck's rear-end collision with a black SUV on the highway shoulder, with the incident likely occurring during the daytime due to the presence of sunlight and shadows.
+2025-04-19 15:54:24,198 - AccidentLog - INFO - Accident Detected - Stream: mn_c550, Location: MN Hwy 55 at Hwy 100, Time: 2025-04-19T19:54:21.432363+00:00, Description: **Initial Observation**
+
+* The traffic camera image depicts a highway scene during daytime, with a clear and sunny atmosphere.
+
+**Accident Scene**
+
+* A red pickup truck appears to have a damaged rear panel, with a white sedan positioned behind it, suggesting possible damage.
+* The red pickup truck is driving on the road, while the white sedan is also on the road, but slightly ahead and to the left of the red pickup truck.
+* The accident scene appears to be on the side of the road
+2025-04-19 15:54:25,305 - AccidentLog - INFO - Accident Detected - Stream: mn_c550, Location: MN Hwy 55 at Hwy 100, Time: 2025-04-19T19:54:24.198383+00:00, Description: Based on the image, an accident appears to have occurred on the highway, but no clear details are visible. The image does not provide sufficient information to accurately describe the accident scene or the vehicles involved.
+2025-04-19 15:54:27,811 - AccidentLog - INFO - Accident Detected - Stream: mn_c550, Location: MN Hwy 55 at Hwy 100, Time: 2025-04-19T19:54:25.306004+00:00, Description: The image shows a daytime scene, likely between 9am and 5pm, of a multi-lane highway with a grassy median, where several vehicles are traveling in both directions. The accident appears to involve two vehicles, a dark-colored car and a red car, which are stopped on the right shoulder of the highway, but there is not enough information to determine the nature of the incident or which vehicle was involved first.
+2025-04-19 15:54:30,290 - AccidentLog - INFO - Accident Detected - Stream: mn_c550, Location: MN Hwy 55 at Hwy 100, Time: 2025-04-19T19:54:27.811617+00:00, Description: The image depicts a daytime scene on a highway, where a red vehicle appears to be stopped in the left lane, with a black vehicle positioned in front of it, and a green vehicle further ahead in the same lane. The surrounding environment suggests a rural area, characterized by grassy embankments and trees in the background.
+2025-04-19 15:54:31,734 - AccidentLog - INFO - Accident Detected - Stream: mn_c550, Location: MN Hwy 55 at Hwy 100, Time: 2025-04-19T19:54:30.291739+00:00, Description: The image is a live highway surveillance camera image of a car accident that appears to be a pile-up involving multiple cars. The accident appears to have occurred on the right side of the highway, possibly near the exit where the grass-covered shoulder begins. It's daytime, as indicated by the natural lighting and lack of streetlights. It appears that one car is blocking the shoulder and the other cars are either parked or involved in a pile-up or crash.
+2025-04-19 15:54:34,440 - AccidentLog - INFO - Accident Detected - Stream: mn_c550, Location: MN Hwy 55 at Hwy 100, Time: 2025-04-19T19:54:31.736234+00:00, Description: **Accident Description**
+
+* **Time of Day:** Daytime (based on the lighting)
+* **Number of Vehicles Involved:** At least two
+* **Injury Status:** Unknown
+* **Location:** On the right shoulder of the highway
+* **Vehicles Involved:**
+	+ A black vehicle appears to be stationary
+	+ Another vehicle, possibly a black SUV, is positioned behind the first vehicle
+2025-04-19 15:54:36,076 - AccidentLog - INFO - Accident Detected - Stream: mn_c550, Location: MN Hwy 55 at Hwy 100, Time: 2025-04-19T19:54:34.440663+00:00, Description: It appears to be daytime, and there is only one vehicle in the accident scene. There is a black car in the right lane of the highway, facing the left, which is out of the frame of the image. The car is facing the left, indicating that it may have been involved in a collision. There is no other vehicle in the accident scene, and no other vehicles are nearby.
+2025-04-19 15:54:37,409 - AccidentLog - INFO - Accident Detected - Stream: mn_c550, Location: MN Hwy 55 at Hwy 100, Time: 2025-04-19T19:54:36.076688+00:00, Description: The image shows a rural highway scene with two lanes of traffic. There are no vehicles in the immediate vicinity of what appears to be an accident or incident. There are several vehicles traveling in both directions along the highway. The lighting in the image indicates a daytime setting.  No vehicles appear to be damaged or involved in an accident.
+2025-04-19 15:54:39,048 - AccidentLog - INFO - Accident Detected - Stream: mn_c550, Location: MN Hwy 55 at Hwy 100, Time: 2025-04-19T19:54:37.410273+00:00, Description: Based on the image, there is no indication of an accident in the scene. The image appears to be a surveillance photo of a highway with multiple lanes and numerous vehicles traveling in both directions. There are no visible signs of a collision or any vehicles involved in an accident. The lighting in the image suggests it is daytime, as the sky is blue and there are no streetlamps or other lighting fixtures visible.
+2025-04-19 15:54:41,259 - AccidentLog - INFO - Accident Detected - Stream: mn_c550, Location: MN Hwy 55 at Hwy 100, Time: 2025-04-19T19:54:39.048771+00:00, Description: The image depicts a daytime accident scene on a highway. A black car, appearing to be a sedan, is stopped on the right shoulder of the highway, while a black car, possibly a sedan, is stopped further in front of it on the left side of the highway.
+2025-04-19 15:54:42,937 - AccidentLog - INFO - Accident Detected - Stream: mn_c550, Location: MN Hwy 55 at Hwy 100, Time: 2025-04-19T19:54:41.261350+00:00, Description: **Accident Scene Description**
+
+* **Time**: Daytime
+* **Vehicles Involved**:
+	+ A black SUV
+	+ A silver sedan
+* **Location**: The shoulder of a highway
+* **Situation**: The silver sedan appears to have collided with the black SUV, which is now on the shoulder.
+2025-04-19 15:54:44,269 - AccidentLog - INFO - Accident Detected - Stream: mn_c550, Location: MN Hwy 55 at Hwy 100, Time: 2025-04-19T19:54:42.937822+00:00, Description: The image depicts a daytime scene on a highway, where one vehicle is stopped alongside the road, while the other is in the process of passing by on the next lane over. 
+
+The vehicle that is stopped appears to be a grey SUV, and it is parked on the shoulder of the road. The other vehicle is a silver sedan that is passing by on the next lane over.
+2025-04-19 15:54:45,393 - AccidentLog - INFO - Accident Detected - Stream: mn_c550, Location: MN Hwy 55 at Hwy 100, Time: 2025-04-19T19:54:44.270104+00:00, Description: Daytime: A black vehicle appears to be driving in the left-hand lane on the highway, and a white vehicle appears to have drifted from the right-hand lane into the left-hand lane and is now being driven on the left shoulder of the highway.
+2025-04-19 15:54:46,512 - AccidentLog - INFO - Accident Detected - Stream: mn_c550, Location: MN Hwy 55 at Hwy 100, Time: 2025-04-19T19:54:45.393764+00:00, Description: * The image shows a daytime accident scene on a multi-lane highway with grassy areas on either side, featuring a water tower in the distance.
+* A single vehicle, a white car, appears to be stopped on the shoulder of a divided highway.
+* The vehicle is not involved in a collision with any other vehicles in the image.
+2025-04-19 15:54:48,833 - AccidentLog - INFO - Accident Detected - Stream: mn_c550, Location: MN Hwy 55 at Hwy 100, Time: 2025-04-19T19:54:46.513386+00:00, Description: **Accident Scene Description**
+
+* Time: Daytime
+* Location: Highway shoulder
+* Vehicles Involved: At least one light-colored sedan
+* Apparent Situation: The vehicle appears to have crashed or broken down on the highway shoulder, with no other vehicles visible in the immediate vicinity.
+2025-04-19 15:59:57,628 - AccidentLog - INFO - Accident Detected - Stream: mn_c550, Location: MN Hwy 55 at Hwy 100, Time: 2025-04-19T19:59:53.091475+00:00, Description: In the daytime, the image shows a highway with a white cabover truck resting in the ditch to the left of the highway. The truck appears to have damaged the center guardrail and is resting at a 45-degree angle. A blue sign is visible in the grassy area between the highway and the ditch, but it is unclear what message it contains.
+2025-04-19 15:59:59,957 - AccidentLog - INFO - Accident Detected - Stream: mn_c550, Location: MN Hwy 55 at Hwy 100, Time: 2025-04-19T19:59:57.629437+00:00, Description: **Accident Scene Description**
+
+* **Time of Day:** Daytime
+* **Location:** A white sedan and a blue SUV are involved in an accident, with the sedan appearing to have struck the SUV.
+* **Additional Details:** The accident appears to have occurred on the highway shoulder.
+2025-04-19 16:00:05,204 - AccidentLog - INFO - Accident Detected - Stream: mn_c550, Location: MN Hwy 55 at Hwy 100, Time: 2025-04-19T19:59:59.958258+00:00, Description: Based on the image, it is not possible to provide a factual description of the accident scene, vehicles involved, or their situation. The image does not depict an accident, but rather a highway with traffic.
+2025-04-19 16:00:10,882 - AccidentLog - INFO - Accident Detected - Stream: mn_c550, Location: MN Hwy 55 at Hwy 100, Time: 2025-04-19T20:00:05.205428+00:00, Description: The image depicts a highway scene with no visible accident, vehicles, or other hazards. The lighting appears to be daytime, with the sun casting a shadow on the road. The overall atmosphere suggests a normal traffic situation, with no indication of an accident or incident.
+2025-04-19 16:00:12,272 - AccidentLog - INFO - Accident Detected - Stream: mn_c550, Location: MN Hwy 55 at Hwy 100, Time: 2025-04-19T20:00:10.883075+00:00, Description: Based on the image, it appears to be daytime, as indicated by the bright lighting and clear visibility of the scene. However, I'm unable to provide a detailed description of the accident scene, including the vehicles involved and their situation, as this information is not visually apparent from the image and requires real-time data or external knowledge that is beyond my capabilities.
+2025-04-19 16:00:13,687 - AccidentLog - INFO - Accident Detected - Stream: mn_c550, Location: MN Hwy 55 at Hwy 100, Time: 2025-04-19T20:00:12.272609+00:00, Description: The accident scene appears to be a daytime scenario, with a white vehicle on the left shoulder and a blue vehicle in the right-hand lane, suggesting a potential collision between the two vehicles. However, without more information, it is not possible to provide further details about the accident.
+2025-04-19 16:00:15,948 - AccidentLog - INFO - Accident Detected - Stream: mn_c550, Location: MN Hwy 55 at Hwy 100, Time: 2025-04-19T20:00:13.688452+00:00, Description: The image depicts an empty highway with a water tower in the background. There is no accident visible in the image, and it appears to be daytime based on the lighting.
+2025-04-19 16:00:20,521 - AccidentLog - INFO - Accident Detected - Stream: mn_c550, Location: MN Hwy 55 at Hwy 100, Time: 2025-04-19T20:00:15.948540+00:00, Description: **Accident Description**
+
+Based on the image, it appears that an accident has occurred on the highway, but no details are provided. The image does not show any vehicles or signs of damage, making it impossible to determine the exact nature of the accident or the involvement of any vehicles.
+2025-04-19 16:00:25,003 - AccidentLog - INFO - Accident Detected - Stream: mn_c550, Location: MN Hwy 55 at Hwy 100, Time: 2025-04-19T20:00:20.522393+00:00, Description: Based on the camera image, the accident scene appears to be a daytime accident.
+
+The vehicles involved in the accident are not clearly visible, with only one partially visible vehicle on the left shoulder of the highway. The accident location is unclear, but it seems to be situated on the left shoulder of the highway, possibly as a result of the accident.
+2025-04-19 16:00:27,324 - AccidentLog - INFO - Accident Detected - Stream: mn_c550, Location: MN Hwy 55 at Hwy 100, Time: 2025-04-19T20:00:25.003819+00:00, Description: The image shows a highway with multiple lanes, and no accidents are visible, therefore, no description can be provided.
+2025-04-19 16:00:33,119 - AccidentLog - INFO - Accident Detected - Stream: mn_c550, Location: MN Hwy 55 at Hwy 100, Time: 2025-04-19T20:00:27.325234+00:00, Description: The image depicts a daytime scene of an accident on a highway. There are no visible vehicles involved in the accident, and the image does not provide a clear indication of what occurred. The presence of vehicles on the road and the overall layout of the highway suggest that it is a daytime scene, likely during the morning or early afternoon when the lighting is bright.
+2025-04-19 16:00:37,198 - AccidentLog - INFO - Accident Detected - Stream: mn_c550, Location: MN Hwy 55 at Hwy 100, Time: 2025-04-19T20:00:33.120052+00:00, Description: The image depicts a daytime scene of a highway with multiple lanes and a median in the middle. The highway is empty except for a few vehicles. There is no accident visible in the image.
+2025-04-19 16:00:39,917 - AccidentLog - INFO - Accident Detected - Stream: mn_c550, Location: MN Hwy 55 at Hwy 100, Time: 2025-04-19T20:00:37.198819+00:00, Description: **Accident Scene Description**
+
+* The accident is taking place on a highway, likely during the daytime hours, as indicated by the blue sky and visible shadows.
+* A black car appears to have struck the concrete barrier on the right side of the highway, resulting in damage to the car's front bumper and windshield.
+* No other vehicles are involved in the accident.
+2025-04-19 16:00:42,403 - AccidentLog - INFO - Accident Detected - Stream: mn_c550, Location: MN Hwy 55 at Hwy 100, Time: 2025-04-19T20:00:39.917667+00:00, Description: Daytime: A black SUV appears to be on the right shoulder of the highway, partially blocking the shoulder and an exit ramp, with no other vehicles involved. The weather appears mostly dry with some dried grass and a clear sky.
+2025-04-19 16:00:51,081 - AccidentLog - INFO - Accident Detected - Stream: mn_c550, Location: MN Hwy 55 at Hwy 100, Time: 2025-04-19T20:00:42.404173+00:00, Description: **Accident Description**
+
+* Occurred during the daytime, as evidenced by the abundant sunlight
+* A white pickup truck appears to have collided with a black sedan on the right-hand side of the highway
+* The black sedan is situated on the side of the road, facing the opposite direction of traffic, on the opposite side of the highway from the white pickup truck
+* The white pickup truck is facing directly at the camera on the right-hand side of the highway, with no visible damage to the
+2025-04-19 16:00:52,204 - AccidentLog - INFO - Accident Detected - Stream: mn_c550, Location: MN Hwy 55 at Hwy 100, Time: 2025-04-19T20:00:51.082829+00:00, Description: The image shows an aerial view of a highway with multiple lanes, with no visible accident or vehicles on the shoulder. There is no apparent accident scene in the image.
+2025-04-19 16:00:54,970 - AccidentLog - INFO - Accident Detected - Stream: mn_c550, Location: MN Hwy 55 at Hwy 100, Time: 2025-04-19T20:00:52.205022+00:00, Description: The image depicts a daytime scene of two cars, a white sedan and a white pickup truck, situated on the side of a road. The white sedan is positioned behind the white pickup truck, with its front bumper partially visible, suggesting that it has collided with the truck.
+
+**Key Details:**
+* The accident occurred during the daytime, as indicated by the bright lighting.
+* The white sedan is positioned behind the white pickup truck, with its front bumper partially visible.
+* The white pickup truck is parked
+2025-04-19 16:00:56,754 - AccidentLog - INFO - Accident Detected - Stream: mn_c550, Location: MN Hwy 55 at Hwy 100, Time: 2025-04-19T20:00:54.970718+00:00, Description: **Accident Description**
+
+* **Time:** Daytime
+* **Situations:**
+	+ A white car is on the shoulder of the highway.
+	+ A silver car is on the highway in the right lane, just past the shoulder.
+	+ The silver car appears to have moved over to the shoulder for some reason.
+2025-04-19 16:01:00,809 - AccidentLog - INFO - Accident Detected - Stream: mn_c550, Location: MN Hwy 55 at Hwy 100, Time: 2025-04-19T20:00:56.754535+00:00, Description: The image depicts a daytime scene on a highway, with the primary focus being a silver minivan partially on the grassy shoulder of the highway. The minivan is positioned after a white SUV on this shoulder, and the SUV appears to have been struck from behind. There are several other cars on the highway, but they are not directly involved in the accident.
+2025-04-19 16:01:04,301 - AccidentLog - INFO - Accident Detected - Stream: mn_c550, Location: MN Hwy 55 at Hwy 100, Time: 2025-04-19T20:01:00.809979+00:00, Description: The image depicts a daytime scene on a highway, with a white SUV on the right shoulder and a silver sedan on the left shoulder. The accident appears to have occurred, with no vehicles blocking the adjacent lanes.
+2025-04-19 16:01:05,416 - AccidentLog - INFO - Accident Detected - Stream: mn_c550, Location: MN Hwy 55 at Hwy 100, Time: 2025-04-19T20:01:04.301549+00:00, Description: Daytime: A white SUV appears to have been struck by a white sedan on the right shoulder of the highway, with the sedan's front end partially lodged into the side of the SUV.
+2025-04-19 16:01:07,698 - AccidentLog - INFO - Accident Detected - Stream: mn_c550, Location: MN Hwy 55 at Hwy 100, Time: 2025-04-19T20:01:05.417354+00:00, Description: Based on the image, an accident has occurred on the highway. However, I'm unable to provide a factual description of the accident scene, including the vehicles involved and their situation, as this information is not visually apparent from the image. Additionally, I'm unable to determine the time of day based on lighting. Therefore, I cannot provide a detailed description as requested.
+2025-04-19 16:01:10,355 - AccidentLog - INFO - Accident Detected - Stream: mn_c550, Location: MN Hwy 55 at Hwy 100, Time: 2025-04-19T20:01:07.698609+00:00, Description: The image shows a daytime scene of a major highway with one car in the foreground. It's difficult to discern what the accident entails, but the car is positioned on the right, near the center of the image, on what appears to be the highway's shoulder.
+2025-04-19 16:01:16,383 - AccidentLog - INFO - Accident Detected - Stream: mn_c550, Location: MN Hwy 55 at Hwy 100, Time: 2025-04-19T20:01:10.355554+00:00, Description: No accident is present in the image. The image shows a highway with three lanes and grassy areas on either side. The highway has a median and a guardrail on the left side. There are no vehicles in the median, and no vehicles appear to be in distress or in an accident. The image appears to be taken during the daytime, as there is sufficient light and the sky is blue with a few clouds.
+2025-04-19 16:01:19,040 - AccidentLog - INFO - Accident Detected - Stream: mn_c550, Location: MN Hwy 55 at Hwy 100, Time: 2025-04-19T20:01:16.383401+00:00, Description: The attached image shows the highway from an elevated view. Based on the lighting and the vehicles' shadows, this image was likely taken in the daytime. There is one accident scene visible on the right side of the highway. One vehicle appears to be a black sedan and is in the right lane with its left side facing toward the viewer. It appears to be stopped in the right shoulder's grassy area. The other vehicle is a black SUV and is in the left lane, facing away from the viewer
+2025-04-19 16:01:21,359 - AccidentLog - INFO - Accident Detected - Stream: mn_c550, Location: MN Hwy 55 at Hwy 100, Time: 2025-04-19T20:01:19.041235+00:00, Description: The image shows a daytime scene of a multi-lane highway with traffic moving in both directions. There is an accident scene visible on the right-hand side of the highway, featuring a blue SUV and a white van.
+2025-04-19 16:01:23,939 - AccidentLog - INFO - Accident Detected - Stream: mn_c550, Location: MN Hwy 55 at Hwy 100, Time: 2025-04-19T20:01:21.361095+00:00, Description: **Accident Scene Description**
+
+Upon analyzing the provided image, an accident appears to have occurred on the highway. Unfortunately, the image resolution is too low to accurately identify the type of vehicles involved in the incident or their exact position on the highway. However, it is evident that the accident is located on the right shoulder of the road, adjacent to a water tower. In contrast, the left shoulder of the road appears to be unoccupied.
+
+**Approximate Time of Day**
+
+The accident occurred during the
+2025-04-19 16:01:29,299 - AccidentLog - INFO - Accident Detected - Stream: mn_c550, Location: MN Hwy 55 at Hwy 100, Time: 2025-04-19T20:01:23.940164+00:00, Description: The image depicts a daytime highway scene with two dark-colored vehicles involved in an accident. One vehicle appears to be on the shoulder, while the other is on the road, suggesting a rear-end collision.
+2025-04-19 16:01:31,631 - AccidentLog - INFO - Accident Detected - Stream: mn_c550, Location: MN Hwy 55 at Hwy 100, Time: 2025-04-19T20:01:29.300179+00:00, Description: There are no visible vehicles in this image. Based on the lighting, it appears to be daytime.
+2025-04-19 16:01:37,515 - AccidentLog - INFO - Accident Detected - Stream: mn_c550, Location: MN Hwy 55 at Hwy 100, Time: 2025-04-19T20:01:31.631894+00:00, Description: **No Accident Visible**
+
+Upon examining the provided image, no indication of an accident is apparent. The scene does not display any signs of a collision or damage to vehicles, and all the vehicles present appear to be in motion. The image captures a daytime snapshot, showcasing a clear and uneventful highway scene with no visible indicators of an accident.
+2025-04-19 16:01:40,948 - AccidentLog - INFO - Accident Detected - Stream: mn_c550, Location: MN Hwy 55 at Hwy 100, Time: 2025-04-19T20:01:37.515517+00:00, Description: Upon examination of the image, it appears that the accident occurred because the black vehicle veered left of the lane and hit the guardrail, causing damage to its front left area. It is daytime as indicated by the sun shining onto the road.
+2025-04-19 16:01:43,754 - AccidentLog - INFO - Accident Detected - Stream: mn_c550, Location: MN Hwy 55 at Hwy 100, Time: 2025-04-19T20:01:40.948807+00:00, Description: * The accident scene consists of a two-lane highway with a grassy median.
+* The image captures the scene in the daytime, as indicated by the presence of sunlight and shadows.
+* At least two vehicles are involved in the accident, although it is difficult to discern their exact details due to the image quality.
+* One vehicle is located on the side of the road, while the other appears to be partially on the grassy median.
+* The vehicles' positions suggest that they may have collided with
+2025-04-19 16:01:48,566 - AccidentLog - INFO - Accident Detected - Stream: mn_c550, Location: MN Hwy 55 at Hwy 100, Time: 2025-04-19T20:01:43.754390+00:00, Description: There is no accident depicted in the provided image. The image shows a highway with multiple lanes of traffic and a grassy median. There are no vehicles affected by an accident. The lighting appears to be daytime.
+2025-04-19 16:01:51,302 - AccidentLog - INFO - Accident Detected - Stream: mn_c550, Location: MN Hwy 55 at Hwy 100, Time: 2025-04-19T20:01:48.567867+00:00, Description: The image captures a daytime scene of a two-lane highway with a grassy median and a water tower in the background. There are no vehicles visible in the image, which is consistent with the timestamp of 01:59:19 (on 3/29/2023), suggesting that the image was taken at night. Therefore, there is no accident to report.
+2025-04-19 16:01:52,466 - AccidentLog - INFO - Accident Detected - Stream: mn_c550, Location: MN Hwy 55 at Hwy 100, Time: 2025-04-19T20:01:51.302788+00:00, Description: The image depicts a daytime accident scene, where a white pickup truck is positioned on the highway shoulder. In the same lane, a white semi-truck appears to have run into the pickup truck, likely causing the accident.
+2025-04-19 16:01:54,331 - AccidentLog - INFO - Accident Detected - Stream: mn_c550, Location: MN Hwy 55 at Hwy 100, Time: 2025-04-19T20:01:52.466545+00:00, Description: **Accident Description**
+
+* The accident scene is illuminated by daylight.
+* A white semi-truck appears to have collided with a white sedan on the highway shoulder.
+* The semi-truck is situated on the left side of the image's center, while the sedan is located on the right side.
+* The semi-truck's rear end is closer to the camera than the sedan, indicating that it has lost control and veered off the road.
+* The sedan appears to have been traveling alongside the
+2025-04-19 16:01:56,817 - AccidentLog - INFO - Accident Detected - Stream: mn_c550, Location: MN Hwy 55 at Hwy 100, Time: 2025-04-19T20:01:54.331460+00:00, Description: Daytime: There appears to be a white semi-truck stopped on the highway shoulder, and a black truck parked in the grassy area to the right of the white semi-truck.
