@@ -1,14 +1,13 @@
 import asyncio
-import os
-from fastapi import FastAPI, WebSocket
+import logging
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from accident_detector import detect_frame_accident
-from together import Together
 
-app = FastAPI()
+# Set up logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
-# Update Together API key from environment
-from accident_detector import together_client
-together_client.api_key = os.environ.get("TOGETHER_API_KEY", "")
+app = FastAPI(title="Accident Detector", description="Real-time traffic accident detection")
 
 @app.get("/")
 def health_check():
@@ -17,6 +16,7 @@ def health_check():
 @app.websocket("/ws/detections")
 async def ws_detections(ws: WebSocket):
     await ws.accept()
+    logger.info("WebSocket connection established")
     try:
         while True:
             # 1) Classify one frame
@@ -27,18 +27,13 @@ async def ws_detections(ws: WebSocket):
             await ws.send_text(result)
             # 3) Wait ~200ms for ~5 FPS
             await asyncio.sleep(0.2)
+    except WebSocketDisconnect:
+        logger.info("WebSocket connection closed")
     except Exception as e:
-        print(f"WebSocket error: {e}")
-        await ws.close()
-    
-@app.on_event("startup")
-async def startup_event():
-    # Ensure API key is set
-    if not together_client.api_key:
-        print("WARNING: TOGETHER_API_KEY not set. API calls will fail.")
-        
-@app.on_event("shutdown")
-async def shutdown_event():
-    # Release the video capture
-    from accident_detector import cap
-    cap.release() 
+        logger.error(f"Error in WebSocket connection: {e}")
+    finally:
+        # Ensure the connection is closed properly
+        try:
+            await ws.close()
+        except:
+            pass  # Already closed 

@@ -11,13 +11,13 @@
             margin: 0 auto;
             padding: 20px;
         }
-        #status {
-            font-weight: bold;
+        .status {
             font-size: 24px;
+            font-weight: bold;
+            padding: 20px;
             margin: 20px 0;
-            padding: 15px;
-            border-radius: 5px;
             text-align: center;
+            border-radius: 5px;
         }
         .accident {
             background-color: #ffcccc;
@@ -27,88 +27,94 @@
             background-color: #ccffcc;
             color: #006600;
         }
-        #log {
+        .log {
             height: 200px;
-            overflow-y: scroll;
+            overflow-y: auto;
             border: 1px solid #ccc;
             padding: 10px;
             margin-top: 20px;
             font-family: monospace;
         }
-        .controls {
-            margin: 20px 0;
+        button {
+            padding: 10px 15px;
+            margin: 10px 0;
         }
     </style>
 </head>
 <body>
-    <h1>Real-Time Accident Detector</h1>
-    <div class="controls">
-        <input type="text" id="wsUrl" value="ws://localhost:10000/ws/detections" style="width: 300px;">
+    <h1>Accident Detector Client</h1>
+    
+    <div id="connection-controls">
         <button id="connect">Connect</button>
         <button id="disconnect" disabled>Disconnect</button>
     </div>
     
-    <div id="status">Waiting for connection...</div>
+    <div class="status" id="status">Disconnected</div>
     
-    <div>
-        <h3>Event Log:</h3>
-        <div id="log"></div>
-    </div>
-
+    <div class="log" id="log"></div>
+    
     <script>
         let socket;
         const connectBtn = document.getElementById('connect');
         const disconnectBtn = document.getElementById('disconnect');
         const statusDiv = document.getElementById('status');
         const logDiv = document.getElementById('log');
-        const wsUrlInput = document.getElementById('wsUrl');
-
-        function appendToLog(message) {
-            const timestamp = new Date().toLocaleTimeString();
-            logDiv.innerHTML += `[${timestamp}] ${message}<br>`;
+        
+        function updateStatus(message) {
+            statusDiv.textContent = message;
+            statusDiv.className = 'status';
+            
+            if (message === 'accident') {
+                statusDiv.classList.add('accident');
+            } else if (message === 'no accident') {
+                statusDiv.classList.add('no-accident');
+            }
+        }
+        
+        function log(message) {
+            const entry = document.createElement('div');
+            entry.textContent = `${new Date().toLocaleTimeString()}: ${message}`;
+            logDiv.appendChild(entry);
             logDiv.scrollTop = logDiv.scrollHeight;
         }
-
-        function updateStatus(message, isAccident) {
-            statusDiv.textContent = message;
-            statusDiv.className = isAccident ? 'accident' : 'no-accident';
-        }
-
+        
         connectBtn.addEventListener('click', () => {
-            const wsUrl = wsUrlInput.value;
-            
-            socket = new WebSocket(wsUrl);
-            
-            socket.onopen = function(e) {
-                connectBtn.disabled = true;
-                disconnectBtn.disabled = false;
-                updateStatus('Connected, waiting for data...', false);
-                appendToLog('WebSocket connection established');
-            };
-            
-            socket.onmessage = function(event) {
-                const data = event.data;
-                appendToLog(`Received: ${data}`);
+            // Change to your actual WebSocket URL
+            const wsUrl = window.location.hostname === 'localhost' 
+                ? 'ws://localhost:10000/ws/detections'
+                : 'wss://cdbackend.onrender.com/ws/detections';
                 
-                if (data === 'accident') {
-                    updateStatus('⚠️ ACCIDENT DETECTED ⚠️', true);
-                } else {
-                    updateStatus('No accident detected', false);
-                }
-            };
-            
-            socket.onclose = function(event) {
-                connectBtn.disabled = false;
-                disconnectBtn.disabled = true;
-                updateStatus('Disconnected', false);
-                appendToLog('WebSocket connection closed');
-            };
-            
-            socket.onerror = function(error) {
-                appendToLog(`WebSocket error: ${error}`);
-                connectBtn.disabled = false;
-                disconnectBtn.disabled = true;
-            };
+            try {
+                socket = new WebSocket(wsUrl);
+                
+                socket.onopen = () => {
+                    log('Connected to WebSocket server');
+                    connectBtn.disabled = true;
+                    disconnectBtn.disabled = false;
+                    updateStatus('Connected - Waiting for data...');
+                };
+                
+                socket.onmessage = (event) => {
+                    const message = event.data;
+                    log(`Received: ${message}`);
+                    updateStatus(message);
+                };
+                
+                socket.onclose = () => {
+                    log('Disconnected from WebSocket server');
+                    connectBtn.disabled = false;
+                    disconnectBtn.disabled = true;
+                    updateStatus('Disconnected');
+                };
+                
+                socket.onerror = (error) => {
+                    log(`WebSocket error: ${error}`);
+                    connectBtn.disabled = false;
+                    disconnectBtn.disabled = true;
+                };
+            } catch (error) {
+                log(`Error: ${error.message}`);
+            }
         });
         
         disconnectBtn.addEventListener('click', () => {
