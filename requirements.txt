@@ -1,6 +1,6 @@
-fastapi
-uvicorn[standard]
-opencv-python-headless
-together
-python-multipart
-websockets 
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+opencv-python-headless==4.8.1.78
+together==0.2.5
+python-multipart==0.0.6
+websockets==11.0.3 
