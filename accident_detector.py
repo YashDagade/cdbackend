@@ -3,7 +3,8 @@ import base64
 from together import Together
 
 # Your HLS URL (master or media playlist)
-VIDEO_SOURCE = "https://511mn.org/path/to/your/chunklist_w872956871.m3u8"
+# Using a public test HLS stream instead of 511mn URL to ensure it works
+VIDEO_SOURCE = "https://storage.googleapis.com/shaka-demo-assets/bbb-dark-truths-hls/hls.m3u8"
 
 # Initialize Together client once
 together_client = Together(api_key="")  # Set via environment variable
