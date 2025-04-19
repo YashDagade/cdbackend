@@ -5,7 +5,7 @@ This document outlines all available API endpoints for the Real-Time Multi-Strea
 ## Base URL
 
 - **Local Development**: `http://localhost:8000` (or port specified when running uvicorn)
-- **Production (Example)**: `https://your-service-name.onrender.com`
+- **Production**: `https://cdbackend.onrender.com`
 
 ## HTTP Endpoints
 
@@ -23,7 +23,7 @@ This document outlines all available API endpoints for the Real-Time Multi-Strea
   ```
 - **Example**:
   ```bash
-  curl http://localhost:8000/
+  curl https://cdbackend.onrender.com/
   ```
 
 ### List Available Streams
@@ -50,7 +50,7 @@ This document outlines all available API endpoints for the Real-Time Multi-Strea
   ```
 - **Example**:
   ```bash
-  curl http://localhost:8000/streams
+  curl https://cdbackend.onrender.com/streams
   ```
 
 ### Get Latest Frame for a Stream
@@ -88,7 +88,7 @@ This document outlines all available API endpoints for the Real-Time Multi-Strea
   ```
 - **Example**:
   ```bash
-  curl http://localhost:8000/stream/mn_c550/frame
+  curl https://cdbackend.onrender.com/stream/mn_c550/frame
   ```
 
 ### Get Latest Detection for a Stream
@@ -103,7 +103,7 @@ This document outlines all available API endpoints for the Real-Time Multi-Strea
     "stream_id": "mn_c550",
     "detection": {
       "status": "success",
-      "result": "no_accident", // or "accident"
+      "result": "safe", // or "accident"
       "description": null, // or "Brief description of the accident..."
       "timestamp": "2023-10-27T10:30:00.123456+00:00", // ISO 8601 format
       "location": "MN Hwy 55 at Hwy 100"
@@ -118,24 +118,68 @@ This document outlines all available API endpoints for the Real-Time Multi-Strea
   ```
 - **Example**:
   ```bash
-  curl http://localhost:8000/stream/mn_c550/detect
+  curl https://cdbackend.onrender.com/stream/mn_c550/detect
   ```
 
-## WebSocket Endpoint
+## WebSocket Endpoints
 
-### Combined Stream Data
+### Frame Stream Endpoint (Video Only)
 
 - **URL**: `/ws/stream/{stream_id}`
 - **WebSocket Protocol**: `ws://` (local) or `wss://` (production)
 - **Path Parameter**: `stream_id` (string, required) - The ID of the stream to connect to.
-- **Description**: Establishes a WebSocket connection for a specific stream. The server pushes combined data messages containing the latest video frame and the latest detection result at the `stream_fps` defined in the configuration.
+- **Description**: Establishes a WebSocket connection for receiving video frames only. The server pushes frames at approximately 30 FPS without any accident detection data.
+- **Message Format (Server -> Client)**: JSON object
+  ```json
+  {
+    "type": "frame",
+    "stream_id": "mn_c550",
+    "frame": "/9j/4AAQSkZJRgABAQE... (base64 encoded image data)"
+  }
+  ```
+- **Use Case**: High-performance video display without the overhead of detection data. Perfect for real-time monitoring displays.
+
+### Accident Analysis Endpoint (Alerts Only)
+
+- **URL**: `/ws/analyze/{stream_id}`
+- **WebSocket Protocol**: `ws://` (local) or `wss://` (production)
+- **Path Parameter**: `stream_id` (string, required) - The ID of the stream to connect to.
+- **Description**: Establishes a WebSocket connection for receiving accident alerts only. The server only pushes a message when an accident is detected.
+- **Message Format (Server -> Client)**: JSON object
+  ```json
+  // Initial connection status message
+  {
+    "type": "status",
+    "stream_id": "mn_c550",
+    "message": "Connected to accident alert stream",
+    "timestamp": 1698408778.123
+  }
+  
+  // Accident alert message
+  {
+    "type": "accident_alert",
+    "stream_id": "mn_c550",
+    "timestamp": "2023-10-27T10:30:00.123456+00:00",
+    "location": "MN Hwy 55 at Hwy 100",
+    "description": "Daytime: A white sedan appears to have rear-ended a blue SUV on the highway shoulder.",
+    "frame": "/9j/4AAQSkZJRgABAQE... (base64 encoded image of the accident)"
+  }
+  ```
+- **Use Case**: Receiving accident notifications only, without the overhead of constant video frames. Perfect for alerting systems, dashboard displays, or mobile notifications.
+
+### Legacy Combined Stream Endpoint (For Backward Compatibility)
+
+- **URL**: `/ws/combined/{stream_id}`
+- **WebSocket Protocol**: `ws://` (local) or `wss://` (production)
+- **Path Parameter**: `stream_id` (string, required) - The ID of the stream to connect to.
+- **Description**: The original WebSocket endpoint that combines both video frames and detection results in each message. Maintained for backward compatibility.
 - **Message Format (Server -> Client)**: JSON object
   ```json
   {
     "frame": "/9j/4AAQSkZJRgABAQE... (base64 encoded image data or null)",
     "detection": {
       "status": "success", // "initializing", "no_frame", "error"
-      "result": "no_accident", // or "accident"
+      "result": "safe", // or "accident"
       "description": null, // or "Brief description..."
       "timestamp": "2023-10-27T10:30:00.123456+00:00", // ISO 8601 format of last detection attempt
       "location": "MN Hwy 55 at Hwy 100",
@@ -143,67 +187,24 @@ This document outlines all available API endpoints for the Real-Time Multi-Strea
     }
   }
   ```
-- **Connection Example**:
-  - Browser:
-    ```javascript
-    const streamId = "mn_c550"; // Or get from user input/config
-    const wsUrl = `wss://your-service-name.onrender.com/ws/stream/${streamId}`;
-    const socket = new WebSocket(wsUrl);
-    const videoElement = document.getElementById('videoFeed'); // Assuming an <img> tag
-    const detectionElement = document.getElementById('detectionStatus'); // Assuming a <div> or <p> tag
+- **Note**: This endpoint runs at approximately 10 FPS rather than the full 30 FPS of the dedicated frame stream endpoint.
 
-    socket.onopen = () => {
-      console.log(`WebSocket connected to stream: ${streamId}`);
-    };
+## Client Implementation Example
 
-    socket.onmessage = (event) => {
-      try {
-        const data = JSON.parse(event.data);
-        
-        // Update video frame
-        if (data.frame) {
-          videoElement.src = `data:image/jpeg;base64,${data.frame}`;
-        } else {
-          // Handle missing frame (e.g., show placeholder)
-          // videoElement.src = 'placeholder.jpg'; 
-        }
-
-        // Update detection status
-        if (data.detection) {
-           const detection = data.detection;
-           let statusText = `Status: ${detection.status}, Result: ${detection.result}`;
-           if (detection.result === 'accident' && detection.description) {
-               statusText += ` | Desc: ${detection.description}`;
-           }
-           statusText += ` | Location: ${detection.location}`;
-           statusText += ` | Time: ${detection.timestamp}`;
-           detectionElement.textContent = statusText;
-           // Add visual cues based on detection.result (e.g., change background color)
-        }
-
-      } catch (error) {
-        console.error("Error parsing WebSocket message:", error);
-      }
-    };
-
-    socket.onerror = (error) => {
-        console.error("WebSocket Error:", error);
-    };
-
-    socket.onclose = (event) => {
-        console.log("WebSocket closed:", event.code, event.reason);
-        // Optionally implement reconnection logic here
-    };
-    ```
+For an example of how to implement both WebSocket endpoints simultaneously, see the `dual_client_example.html` file in the repository.
 
 ## Implementation Details
 
 - **Configuration**: Stream sources are defined in `streams_config.py`.
 - **Processing**: Each stream is handled by a separate `VideoStreamProcessor` instance in background threads.
 - **Frame Extraction**: Uses `ffmpeg` for HLS streams or downloads static images for fallback sources.
-- **Detection**: Uses Together AI LLaMA Vision model. First classifies ('accident'/'no_accident'), then describes if an accident is found.
+- **Detection**: Uses Together AI LLaMA Vision model. First classifies ('accident'/'safe'), then describes if an accident is found.
+- **Analysis Architecture**: 
+    - Each processor uses a queue with multiple worker threads to analyze frames without blocking.
+    - Frames are fed into the analysis queue periodically (according to configured `analysis_fps`).
+    - When an accident is detected, it's added to a broadcast queue for notification.
 - **Timing**: 
-    - Video frames are streamed via WebSocket at `stream_fps`.
-    - Accident detection/description runs independently at `analysis_fps`.
-    - The WebSocket message includes the *latest available* frame and the *latest available* detection result.
+    - Video frames are streamed via `/ws/stream` at 30 FPS.
+    - Accident detection runs at the configured `analysis_fps` in the background.
+    - Accident alerts are sent on `/ws/analyze` only when an accident is detected.
 - **Logging**: General logs go to console. Detected accidents are logged with details to `logs/accidents.log`.

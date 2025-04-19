@@ -1,69 +1,151 @@
-# Real‑Time Multi-Stream Accident Detector
+# Real-Time Multi-Stream Accident Detector 🚗 🔍
 
-Streams video from configured sources (e.g., 511mn HLS feeds), classifies frames for accidents using a Vision model (Together AI LLaMA), generates descriptions for detected accidents, and pushes combined frame/detection data over WebSockets.
+A service that monitors multiple traffic camera streams, detects potential accidents using AI, and provides real-time video streaming and accident alerts through modern WebSocket endpoints.
 
-## Features
+## 🌐 Demo Site
 
-- **Multiple Stream Support**: Configure and process multiple video streams simultaneously.
-- **Real-time Detection**: Classifies frames as 'accident' or 'no_accident'.
-- **Accident Description**: Generates a brief description if an accident is detected.
-- **Combined WebSocket Stream**: Provides a single endpoint per stream (`/ws/stream/{stream_id}`) sending both video frames and detection results.
-- **Accident Logging**: Logs detected accidents with timestamp, location, and description to `logs/accidents.log`.
-- **REST API**: Endpoints to list streams and get latest frame/detection data.
+The application is deployed at: [https://cdbackend.onrender.com](https://cdbackend.onrender.com)
 
-## Setup
+## 🔥 Key Features
 
-1.  **Configure Streams**: 
-    - Edit `streams_config.py`.
-    - Define each video source with a unique `id`, `url` (M3U8 or 'fallback'), `location` description, `analysis_fps`, and `stream_fps`.
-2.  **Set API Key**: 
-    - Set your Together API key as an environment variable: `TOGETHER_API_KEY`.
-    - You can create a `.env` file (add it to `.gitignore`!) with `TOGETHER_API_KEY=your_key_here` for local development.
-3.  **Install Dependencies**:
-    ```bash
-    pip install -r requirements.txt
-    ```
+- **Multi-Stream Support**: Monitor multiple traffic cameras simultaneously
+- **Real-time Video Streaming**: 30 FPS video delivery to clients
+- **AI-Powered Accident Detection**: Using Together AI's LLaMA-3.2-11B-Vision model 
+- **Optimized Dual WebSocket Architecture**:
+  - `/ws/stream/{stream_id}` - High-performance 30 FPS video stream
+  - `/ws/analyze/{stream_id}` - Dedicated accident alert notifications
 
-## Running Locally
+## 📊 Architecture Overview
 
-```bash
-# Ensure TOGETHER_API_KEY is set in your environment or .env file
-uvicorn main:app --reload --port 8000 
+![Architecture](https://i.ibb.co/R3nnVMd/accident-detector-architecture.png)
+
+The system uses a clean, efficient architecture:
+
+1. **Video Processing**: 
+   - Background threads extract frames from video streams (HLS/M3U8 format) using ffmpeg
+   - Frames are continuously updated at 30 FPS
+
+2. **AI Analysis**:
+   - Separate worker threads analyze frames without blocking the video stream
+   - Queue-based design prevents analysis bottlenecks
+   - Two-step AI process: detection followed by accident description
+   - Multi-threaded analysis prevents long AI calls from affecting performance
+
+3. **Client Communication**:
+   - Separated endpoints allow clients to connect only to what they need
+   - High-performance frame streaming without the detection overhead
+   - Targeted accident alerts without constant frame transmission
+
+## 🚀 Quick Start
+
+### Prerequisites
+
+- Python 3.11+
+- ffmpeg (for HLS stream processing)
+- Together AI API key (for accident detection)
+
+### Installation & Setup
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/yourusername/accident-detector.git
+   cd accident-detector
+   ```
+
+2. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+3. Set up your API key:
+   ```bash
+   # Create a .env file
+   echo "TOGETHER_API_KEY=your_api_key_here" > .env
+   ```
+
+4. Run the application:
+   ```bash
+   uvicorn main:app --reload
+   ```
+
+5. Open the test client:
+   - Navigate to `http://localhost:8000/dual_client_example.html` or open the HTML file directly
+
+### Configuration
+
+Edit `streams_config.py` to add or modify your video streams:
+
+```python
+STREAMS = [
+    {
+        "id": "mn_c550",
+        "url": "https://video.dot.state.mn.us/public/C550.stream/chunklist_w780326163.m3u8",
+        "location": "MN Hwy 55 at Hwy 100",
+        "analysis_fps": 1,  # Check for accidents once per second
+    },
+    # Add more streams as needed
+]
 ```
 
-Connect your WebSocket client to `ws://localhost:8000/ws/stream/{stream_id}` (e.g., `ws://localhost:8000/ws/stream/mn_c550`).
+## 📖 API Documentation
 
-## Running with Docker
+See [API_ROUTES.md](API_ROUTES.md) for detailed API documentation.
 
-```bash
-docker build -t multi-stream-detector . 
-docker run -e TOGETHER_API_KEY=$TOGETHER_API_KEY -p 10000:8000 multi-stream-detector
+## 📱 Client Integration
+
+Two options for integrating with clients:
+
+### Option 1: Separate Connections (Recommended)
+
+```javascript
+// Video stream for real-time display
+const frameSocket = new WebSocket(`wss://cdbackend.onrender.com/ws/stream/mn_c550`);
+frameSocket.onmessage = (event) => {
+    const data = JSON.parse(event.data);
+    videoElement.src = `data:image/jpeg;base64,${data.frame}`;
+};
+
+// Analysis stream for accident alerts
+const analysisSocket = new WebSocket(`wss://cdbackend.onrender.com/ws/analyze/mn_c550`);
+analysisSocket.onmessage = (event) => {
+    const data = JSON.parse(event.data);
+    if (data.type === 'accident_alert') {
+        showAlert(data.description, data.frame);
+    }
+};
 ```
 
-*(Note: Dockerfile maps internal port 8000 to external port 10000)*
-Connect WebSocket clients to `ws://localhost:10000/ws/stream/{stream_id}`.
+### Option 2: Legacy Combined Stream (Not Recommended)
 
-## Deploy on Render.com
+```javascript
+const socket = new WebSocket(`wss://cdbackend.onrender.com/ws/combined/mn_c550`);
+socket.onmessage = (event) => {
+    const data = JSON.parse(event.data);
+    if (data.frame) {
+        videoElement.src = `data:image/jpeg;base64,${data.frame}`;
+    }
+    if (data.detection && data.detection.result === 'accident') {
+        showAlert(data.detection.description);
+    }
+};
+```
 
-1.  Push this repo (including `streams_config.py`) to GitHub.
-2.  On Render.com, create a New → Web Service.
-3.  Connect your GitHub repository.
-4.  **Environment**: Python (Render might auto-detect, otherwise select Python 3).
-5.  **Build Command**: `pip install -r requirements.txt`
-6.  **Start Command**: `uvicorn main:app --host 0.0.0.0 --port 8000`
-7.  **Environment Variables** (under Environment tab):
-    - Add `TOGETHER_API_KEY` → your API key (mark as secret).
-    - Set `PYTHON_VERSION` to `3.11` (or match your local version).
-8.  Click Create Web Service.
+## 🧪 Example Client
 
-Your service will be live at `your-service-name.onrender.com`. Connect WebSockets to `wss://your-service-name.onrender.com/ws/stream/{stream_id}`.
+A complete example client implementation is provided in `dual_client_example.html`. This client demonstrates:
 
-*(Note: The free tier spins down with inactivity, causing a delay on first access.)*
+- Connecting to both WebSocket endpoints
+- Displaying the video stream at 30 FPS
+- Showing accident alerts in a dedicated panel
+- FPS monitoring
+- Connection status indicators
 
-## API Documentation
+## 📋 License
 
-For detailed information on all available endpoints and data formats, see [API_ROUTES.md](API_ROUTES.md).
+MIT License
 
-## Testing
+## 🔧 Troubleshooting
 
-A basic browser-based test client is included in `client_example.html`. You'll need to modify it to connect to the new `/ws/stream/{stream_id}` endpoint and handle the combined JSON data format.
+- **No frames showing**: Ensure the M3U8 URL is valid and accessible from your server
+- **Low frame rate**: Check network conditions and client performance
+- **AI detection not working**: Verify your Together AI API key is valid

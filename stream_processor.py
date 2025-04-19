@@ -11,6 +11,7 @@ from pathlib import Path
 import urllib.request
 import random
 from together import Together
+from queue import Queue, Empty
 
 # --- Logging Setup ---
 log_formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -42,7 +43,9 @@ together_client = Together(api_key=os.environ.get("TOGETHER_API_KEY"))
 
 CLASSIFICATION_PROMPT = (
     "You are an automated traffic monitoring system. Classify the attached image based ONLY on whether a vehicle accident is visible. "
-    "Respond with exactly one word: 'accident' or 'no_accident'."
+    "Traffic cameras rarely capture accidents - most views show normal traffic flow. Only identify an accident when there is clear evidence "
+    "of a collision, vehicle damage, or unusual positioning of vehicles on the road. "
+    "Respond with exactly one word: 'accident' or 'safe'."
 )
 DESCRIPTION_PROMPT = (
     "An accident has been detected in the attached image. Provide a brief, factual description of the accident scene, "
@@ -52,10 +55,10 @@ DESCRIPTION_PROMPT = (
 
 # --- Fallback Sources --- (Used if stream_config['url'] == 'fallback')
 FALLBACK_SOURCES = [
-    "https://511ev.org/cameras/latest/R1_167_St_Louis_River.jpg",
-    "https://511ev.org/cameras/latest/R1_21_Thompson_Hill.jpg",
-    "https://511ev.org/cameras/latest/R1_13_Mesaba.jpg",
-    "https://511ev.org/cameras/latest/R1_172_North_Shore.jpg"
+    "https://511ev.org/cameras/CAM106/latest.jpg",
+    "https://traffic.511mn.org/cameras/CAM108/latest.jpg",
+    "https://traffic.511mn.org/cameras/CAM110/latest.jpg",
+    "https://traffic.511mn.org/cameras/CAM112/latest.jpg"
 ]
 
 class VideoStreamProcessor:
@@ -65,7 +68,8 @@ class VideoStreamProcessor:
         self.location = stream_config['location']
         self.stream_url = stream_config['url']
         self.analysis_interval = 1.0 / stream_config['analysis_fps']
-        self.stream_interval = 1.0 / stream_config['stream_fps']
+        # For backward compatibility - stream_fps is now fixed at 30 FPS
+        self.stream_interval = 1.0 / 30.0  # Fixed 30 FPS for all streams
         self.frames_dir = Path(f"frames/{self.stream_id}")
         self.current_frame_path = self.frames_dir / "current_frame.jpg"
 
@@ -73,31 +77,42 @@ class VideoStreamProcessor:
 
         self.latest_frame_base64 = None
         self.latest_frame_time = 0
+        
+        # For backward compatibility
         self.latest_detection_result = {
             "status": "initializing",
-            "result": "no_accident",
+            "result": "safe",
             "description": None,
             "timestamp": None,
             "location": self.location
         }
+        
         self.use_fallback_source = (self.stream_url == 'fallback')
         self.fallback_index = 0
 
+        # New queue-based system
+        self.analysis_queue = Queue()
+        self.broadcast_queue = Queue()
+        self.analysis_clients = set()
+        self.analyze_threads = []
+        
         self._stop_event = threading.Event()
         self._frame_extractor_thread = None
-        self._detector_thread = None
+        self._analysis_feed_thread = None
         self._ffmpeg_process = None
 
     def _validate_m3u8_url(self):
         if self.use_fallback_source:
             return False # No URL to validate for fallback
         try:
+            # More lenient validation - just check if URL returns any valid response
             headers = {
                 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.114 Safari/537.36'
             }
-            response = requests.head(self.stream_url, headers=headers, timeout=5)
+            response = requests.get(self.stream_url, headers=headers, timeout=5)
             logger.info(f"[{self.stream_id}] M3U8 URL validation status: {response.status_code}")
-            return response.status_code == 200
+            # Accept any 2xx or 3xx status code as valid
+            return response.status_code < 400
         except Exception as e:
             logger.error(f"[{self.stream_id}] Error validating M3U8 URL '{self.stream_url}': {e}")
             return False
@@ -107,7 +122,6 @@ class VideoStreamProcessor:
         self.fallback_index += 1
         try:
             url = f"{source}?nocache={int(time.time())}"
-            #logger.debug(f"[{self.stream_id}] Downloading fallback frame from: {url}")
             urllib.request.urlretrieve(url, self.current_frame_path)
             return True
         except Exception as e:
@@ -121,7 +135,7 @@ class VideoStreamProcessor:
             "-headers", "User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36",
             "-protocol_whitelist", "file,http,https,tcp,tls",
             "-i", self.stream_url,
-            "-vf", f"fps={self.config['stream_fps']}", # Use stream_fps for output
+            "-vf", f"fps={30}", # Fixed 30 FPS for stream endpoint
             "-q:v", "2",
             "-update", "1",
             "-y", str(self.current_frame_path)
@@ -150,42 +164,91 @@ class VideoStreamProcessor:
         while not self._stop_event.is_set():
             if not self._get_fallback_frame():
                 logger.warning(f"[{self.stream_id}] Failed to get fallback frame, retrying...")
-            time.sleep(self.stream_interval) # Sleep according to stream FPS
+            time.sleep(1.0 / 30.0)  # 30 FPS for consistent streaming
         logger.info(f"[{self.stream_id}] Fallback frame loop stopped.")
 
     def _start_frame_extraction_thread(self):
-        if self.use_fallback_source or not self._validate_m3u8_url():
+        # Only use fallback if explicitly configured that way
+        if self.use_fallback_source:
             logger.warning(f"[{self.stream_id}] Using fallback image source.")
-            self.use_fallback_source = True
             self._frame_extractor_thread = threading.Thread(target=self._fallback_loop, daemon=True)
         else:
+            # Try ffmpeg directly without validation - let ffmpeg handle connectivity
             logger.info(f"[{self.stream_id}] Using M3U8 stream source: {self.stream_url}")
             self._frame_extractor_thread = threading.Thread(target=self._run_ffmpeg, daemon=True)
         
         self._frame_extractor_thread.start()
 
-    def _detect_loop(self):
-        logger.info(f"[{self.stream_id}] Starting detection loop (interval: {self.analysis_interval:.2f}s)." )
+    def _periodically_feed_analysis(self):
+        """Feed frames to the analysis queue at regular intervals"""
+        logger.info(f"[{self.stream_id}] Starting analysis feed loop (interval: {self.analysis_interval:.2f}s).")
         while not self._stop_event.is_set():
             start_time = time.monotonic()
             frame_b64 = self.get_latest_frame_base64()
             if frame_b64:
-                self._run_detection(frame_b64)
-            else:
-                 self.latest_detection_result['status'] = "no_frame"
-                 # logger.warning(f"[{self.stream_id}] No frame available for detection.")
-                 pass # Keep status as is if no frame
-
-            # Calculate sleep time to maintain desired analysis FPS
+                # Only add if queue isn't too large to prevent memory issues
+                if self.analysis_queue.qsize() < 5:
+                    self.analysis_queue.put(frame_b64)
+            
+            # Calculate sleep time to maintain desired analysis feed rate
             elapsed = time.monotonic() - start_time
             sleep_time = max(0, self.analysis_interval - elapsed)
             time.sleep(sleep_time)
-        logger.info(f"[{self.stream_id}] Detection loop stopped.")
+        logger.info(f"[{self.stream_id}] Analysis feed loop stopped.")
 
-    def _run_detection(self, img_b64):
-        current_time = datetime.datetime.now(datetime.timezone.utc).isoformat()
+    def _analyze_worker(self):
+        """Worker thread that processes frames from the analysis queue"""
+        logger.info(f"[{self.stream_id}] Starting analysis worker thread.")
+        while not self._stop_event.is_set():
+            try:
+                # Get frame with timeout to allow checking stop_event periodically
+                try:
+                    frame_b64 = self.analysis_queue.get(timeout=1.0)
+                except Empty:
+                    continue
+                
+                # Perform accident detection
+                result = self.detect_accident(frame_b64)
+                
+                # Update legacy detection result for backward compatibility
+                current_time = datetime.datetime.utcnow().isoformat()
+                self.latest_detection_result = {
+                    "status": "success",
+                    "result": result,
+                    "description": None,
+                    "timestamp": current_time,
+                    "location": self.location
+                }
+                
+                # If accident detected, get description and broadcast alert
+                if result == "accident":
+                    description = self.describe_accident(frame_b64)
+                    self.latest_detection_result["description"] = description
+                    
+                    # Create message for analysis clients
+                    message = {
+                        "type": "accident_alert",
+                        "stream_id": self.stream_id,
+                        "timestamp": current_time,
+                        "location": self.location,
+                        "description": description,
+                        "frame": frame_b64  # Include the frame that triggered the alert
+                    }
+                    
+                    # Add to broadcast queue
+                    self.broadcast_queue.put(message)
+                    
+                    # Log the accident
+                    accident_logger.info(f"Accident Detected - Stream: {self.stream_id}, Location: {self.location}, Time: {current_time}, Description: {description}")
+                
+            except Exception as e:
+                logger.error(f"[{self.stream_id}] Error in analysis worker: {e}", exc_info=True)
+        
+        logger.info(f"[{self.stream_id}] Analysis worker thread stopped.")
+
+    def detect_accident(self, img_b64):
+        """Detect if an accident is present in the image."""
         try:
-            # --- Step 1: Classification --- 
             response = together_client.chat.completions.create(
                 model="meta-llama/Llama-3.2-11B-Vision-Instruct-Turbo",
                 messages=[
@@ -194,61 +257,35 @@ class VideoStreamProcessor:
                         {"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{img_b64}"}}
                     ]}
                 ],
-                max_tokens=10,
-                temperature=0.1, # Low temp for classification
+                max_tokens=15,
+                temperature=0.1,  # Low temp for classification
                 stream=False
             )
             classification_text = response.choices[0].message.content.strip().lower()
-            result = "accident" if "accident" in classification_text else "no_accident"
-            
-            # Update status immediately after classification
-            self.latest_detection_result = {
-                "status": "success",
-                "result": result,
-                "description": None, # Reset description
-                "timestamp": current_time,
-                "location": self.location
-            }
-
-            # --- Step 2: Description (if accident) --- 
-            if result == "accident":
-                try:
-                    desc_response = together_client.chat.completions.create(
-                        model="meta-llama/Llama-3.2-11B-Vision-Instruct-Turbo",
-                        messages=[
-                            {"role": "user", "content": [
-                                {"type": "text", "text": DESCRIPTION_PROMPT},
-                                {"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{img_b64}"}}
-                            ]}
-                        ],
-                         max_tokens=100,
-                         temperature=0.7, # Higher temp for creative description
-                         stream=False
-                    )
-                    description = desc_response.choices[0].message.content.strip()
-                    self.latest_detection_result["description"] = description
-                    
-                    # Log the accident details
-                    accident_logger.info(f"Accident Detected - Stream: {self.stream_id}, Location: {self.location}, Time: {current_time}, Description: {description}")
-                
-                except Exception as desc_e:
-                    logger.error(f"[{self.stream_id}] Error getting accident description: {desc_e}")
-                    self.latest_detection_result["description"] = "Error generating description."
-                    # Still log the accident was detected
-                    accident_logger.warning(f"Accident Detected - Stream: {self.stream_id}, Location: {self.location}, Time: {current_time}, Description: <Error> - {desc_e}")
-
-            # logger.debug(f"[{self.stream_id}] Detection result: {self.latest_detection_result['result']}")
-
+            return "safe" if "safe" in classification_text else "accident"
         except Exception as e:
-            logger.error(f"[{self.stream_id}] Error during Together AI call: {e}")
-            self.latest_detection_result = {
-                 "status": "error",
-                 "result": "no_accident", # Default to no_accident on error
-                 "description": None,
-                 "timestamp": current_time,
-                 "location": self.location,
-                 "error_message": str(e)
-            }
+            logger.error(f"[{self.stream_id}] Error during accident detection: {e}")
+            return "safe"  # Default to safe on error
+
+    def describe_accident(self, img_b64):
+        """Generate a description for a detected accident."""
+        try:
+            desc_response = together_client.chat.completions.create(
+                model="meta-llama/Llama-3.2-11B-Vision-Instruct-Turbo",
+                messages=[
+                    {"role": "user", "content": [
+                        {"type": "text", "text": DESCRIPTION_PROMPT},
+                        {"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{img_b64}"}}
+                    ]}
+                ],
+                max_tokens=100,
+                temperature=0.7,  # Higher temp for creative description
+                stream=False
+            )
+            return desc_response.choices[0].message.content.strip()
+        except Exception as e:
+            logger.error(f"[{self.stream_id}] Error getting accident description: {e}")
+            return "Error generating description."
 
     def get_latest_frame_base64(self):
         try:
@@ -276,20 +313,37 @@ class VideoStreamProcessor:
             return self.latest_frame_base64 # Return last known frame
 
     def get_latest_data(self):
-        """Returns the latest frame and detection data combined."""
+        """Returns the latest frame and detection data combined (for backward compatibility)."""
         return {
             "frame": self.get_latest_frame_base64(),
             "detection": self.latest_detection_result
         }
 
+    def start_analysis_workers(self, num_threads=2):
+        """Start multiple analysis worker threads."""
+        for i in range(num_threads):
+            thread = threading.Thread(target=self._analyze_worker, daemon=True)
+            thread.start()
+            self.analyze_threads.append(thread)
+            logger.info(f"[{self.stream_id}] Started analysis worker thread #{i+1}")
+
     def start(self):
         logger.info(f"[{self.stream_id}] Starting video stream processor...")
         self._stop_event.clear()
+        
+        # Start frame extraction
         self._start_frame_extraction_thread()
+        
         # Give frame extractor a moment to start
         time.sleep(1)
-        self._detector_thread = threading.Thread(target=self._detect_loop, daemon=True)
-        self._detector_thread.start()
+        
+        # Start analysis feed thread
+        self._analysis_feed_thread = threading.Thread(target=self._periodically_feed_analysis, daemon=True)
+        self._analysis_feed_thread.start()
+        
+        # Start analysis worker threads
+        self.start_analysis_workers(2)  # Start 2 worker threads
+        
         logger.info(f"[{self.stream_id}] Video stream processor started.")
 
     def stop(self):
@@ -314,9 +368,16 @@ class VideoStreamProcessor:
         if self._frame_extractor_thread and self._frame_extractor_thread.is_alive():
             logger.debug(f"[{self.stream_id}] Waiting for frame extractor thread...")
             self._frame_extractor_thread.join(timeout=5)
-        if self._detector_thread and self._detector_thread.is_alive():
-            logger.debug(f"[{self.stream_id}] Waiting for detector thread...")
-            self._detector_thread.join(timeout=5)
+        
+        if self._analysis_feed_thread and self._analysis_feed_thread.is_alive():
+            logger.debug(f"[{self.stream_id}] Waiting for analysis feed thread...")
+            self._analysis_feed_thread.join(timeout=5)
+        
+        # Wait for all analysis worker threads
+        for i, thread in enumerate(self.analyze_threads):
+            if thread.is_alive():
+                logger.debug(f"[{self.stream_id}] Waiting for analysis worker thread #{i+1}...")
+                thread.join(timeout=5)
         
         logger.info(f"[{self.stream_id}] Video stream processor stopped.")
 
