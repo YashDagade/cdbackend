@@ -25,3 +25,4 @@ venv/
 ENV/
 .idea/
 .vscode/
+prompt.md
