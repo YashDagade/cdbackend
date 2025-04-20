@@ -225,7 +225,7 @@ class VideoStreamProcessor:
                 # Temporarily bypass actual detection for testing
                 # Perform accident detection
                 # result = self.detect_accident(frame_b64)
-                result = "accident" if random.random() < 0.3 else "safe"
+                result = "accident" if random.random() < 0.01 else "safe"
                 # --- END SIMULATION ---
 
                 # Update legacy detection result for backward compatibility
