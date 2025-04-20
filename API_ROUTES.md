@@ -141,11 +141,14 @@ This document outlines all available API endpoints for the Real-Time Multi-Strea
 
 ### Accident Analysis Endpoint (Alerts Only)
 
+### Analysis Endpoint (Classification Updates & Accident Alerts)
+
 - **URL**: `/ws/analyze/{stream_id}`
 - **WebSocket Protocol**: `ws://` (local) or `wss://` (production)
 - **Path Parameter**: `stream_id` (string, required) - The ID of the stream to connect to.
 - **Description**: Establishes a WebSocket connection for receiving accident alerts only. The server only pushes a message when an accident is detected.
-- **Message Format (Server -> Client)**: JSON object
+- **Description**: Establishes a WebSocket connection for receiving **both** periodic classification results (`classification_update`) and detailed accident alerts (`accident_alert`).
+- **Message Format (Server -> Client)**: JSON object. Possible `type` values are `status`, `classification_update`, and `accident_alert`.
   ```json
   // Initial connection status message
   {
@@ -164,8 +167,18 @@ This document outlines all available API endpoints for the Real-Time Multi-Strea
     "description": "Daytime: A white sedan appears to have rear-ended a blue SUV on the highway shoulder.",
     "frame": "/9j/4AAQSkZJRgABAQE... (base64 encoded image of the accident)"
   }
+  
+  // Classification update message (sent periodically)
+  { 
+    "type": "classification_update",
+    "stream_id": "mn_c550",
+    "timestamp": "2024-04-20T12:53:11.000000+00:00", // ISO 8601 format
+    "result": "safe", // or "accident"
+    "location": "MN Hwy 55 at Hwy 100"
+  }
   ```
 - **Use Case**: Receiving accident notifications only, without the overhead of constant video frames. Perfect for alerting systems, dashboard displays, or mobile notifications.
+- **Use Case**: Monitoring the classification status of a stream and receiving detailed alerts with image and description when an accident is detected. Suitable for dashboards, logging, and triggering automated actions.
 
 ### Legacy Combined Stream Endpoint (For Backward Compatibility)
 
@@ -199,12 +212,14 @@ For an example of how to implement both WebSocket endpoints simultaneously, see 
 - **Processing**: Each stream is handled by a separate `VideoStreamProcessor` instance in background threads.
 - **Frame Extraction**: Uses `ffmpeg` for HLS streams or downloads static images for fallback sources.
 - **Detection**: Uses Together AI LLaMA Vision model. First classifies ('accident'/'safe'), then describes if an accident is found.
-- **Analysis Architecture**: 
+- **Analysis Architecture**:
     - Each processor uses a queue with multiple worker threads to analyze frames without blocking.
     - Frames are fed into the analysis queue periodically (according to configured `analysis_fps`).
-    - When an accident is detected, it's added to a broadcast queue for notification.
-- **Timing**: 
-    - Video frames are streamed via `/ws/stream` at 30 FPS.
-    - Accident detection runs at the configured `analysis_fps` in the background.
-    - Accident alerts are sent on `/ws/analyze` only when an accident is detected.
+    - Every classification result (`safe` or `accident`) is added to a broadcast queue.
+    - When an accident is detected, the description is generated and added to the broadcast queue as a separate message.
+- **Timing & Messages**:
+    - Video frames are streamed via `/ws/stream` at ~30 FPS.
+    - Classification runs at the configured `analysis_fps` in the background.
+    - Classification results (`classification_update`) are sent via `/ws/analyze` as they occur.
+    - Accident alerts (`accident_alert`), including description and frame, are sent via `/ws/analyze` only when an accident classification occurs.
 - **Logging**: General logs go to console. Detected accidents are logged with details to `logs/accidents.log`.

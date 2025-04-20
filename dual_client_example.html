@@ -274,6 +274,7 @@
             logDiv.appendChild(entry);
             // Auto-scroll to the bottom
             logDiv.scrollTop = logDiv.scrollHeight;
+            console.log(message, "message");
         }
         
         // Log helper for classification log
@@ -472,13 +473,13 @@
         // Connect to frame stream
         function connectFrameStream(protocol, host, port) {
             const wsUrl = `wss://cdbackend.onrender.com/ws/stream/${currentStreamId}`;
-            log(`Connecting to frame stream: ${wsUrl}`);
+            console.log(`Connecting to frame stream: ${wsUrl}`);
             
             try {
                 frameSocket = new WebSocket(wsUrl);
                 
                 frameSocket.onopen = () => {
-                    log(`Connected to frame stream: ${currentStreamId}`);
+                    console.log(`Connected to frame stream: ${currentStreamId}`);
                     // Start FPS counter only when WebSocket is open
                     startFpsCounter();
                     updateConnectionStatus();
@@ -487,6 +488,7 @@
                 frameSocket.onmessage = (event) => {
                     try {
                         const data = JSON.parse(event.data);
+                        console.log(data, "data");
                         // Handle frame data
                         if (data.type === 'frame' && data.frame) {
                             updateVideoFrame(data.frame, data.timestamp);
