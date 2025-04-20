@@ -473,6 +473,7 @@
         // Connect to frame stream
         function connectFrameStream(protocol, host, port) {
             const wsUrl = `wss://cdbackend.onrender.com/ws/stream/${currentStreamId}`;
+            //const wsUrl = `${protocol}//${host}${port}/ws/stream/${currentStreamId}`;
             console.log(`Connecting to frame stream: ${wsUrl}`);
             
             try {
