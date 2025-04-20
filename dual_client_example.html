@@ -184,7 +184,8 @@
     <div class="container">
         <div class="stream-selector">
             <label for="streamIdInput">Stream ID:</label>
-            <input type="text" id="streamIdInput" value="mn_c550" placeholder="Enter Stream ID (e.g., mn_c550)">
+            <input type="text" id="streamIdInput" value="demo_crash2" placeholder="Enter Stream ID (e.g., demo_crash1)"> 
+            <!-- EXTREMELY IMPORTANT: This is the stream ID for the demo crash clip - SYNCHRONIZE THIS WITH THE STREAM ID IN THE BACKEND in streams_config.py -->
         </div>
         
         <div class="connection-controls">
@@ -472,8 +473,8 @@
         
         // Connect to frame stream
         function connectFrameStream(protocol, host, port) {
-            const wsUrl = `wss://cdbackend.onrender.com/ws/stream/${currentStreamId}`;
-            //const wsUrl = `${protocol}//${host}${port}/ws/stream/${currentStreamId}`;
+            // const wsUrl = `wss://cdbackend.onrender.com/ws/stream/${currentStreamId}`;
+            const wsUrl = `${protocol}//${host}${port}/ws/stream/${currentStreamId}`;
             console.log(`Connecting to frame stream: ${wsUrl}`);
             
             try {

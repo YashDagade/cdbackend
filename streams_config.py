@@ -42,21 +42,22 @@
 # ]
 
 
-# Configuration for video streams
+# # Configuration for video streams
 
 STREAMS = [
-    {
-        "id": "demo_crash1",
-        "url": "https://cdbackend-demo.vercel.app/demo_crash1/demo_crash1.m3u8",
-        "location": "Demo Crash Clip 1",
-        "analysis_fps": 1,
-    },
     # {
-    #     "id": "demo_crash2",
-    #     "url": "https://cdbackend-demo-1v9lrpi39-yashdagades-projects.vercel.app/crash2/crash2.m3u8",
-    #     "location": "Demo Crash Clip 2",
+    #     "id": "demo_crash1",
+    #      "url": "https://cdbackend-demo.vercel.app/demo_crash3/demo_crash3.m3u8",
+    #     #"url": "https://video.dot.state.mn.us/public/C550.stream/chunklist_w780326163.m3u8",
+    #     "location": "Demo Crash Clip 1",
     #     "analysis_fps": 1,
     # },
+    {
+        "id": "demo_crash2",
+        "url": "https://cdbackend-demo.vercel.app/demo_crash2/demo_crash2.m3u8",
+        "location": "Demo Crash Clip 2",
+        "analysis_fps": 1,
+    },
     # {
     #     "id": "demo_crash3",
     #     "url": "https://cdbackend-demo-1v9lrpi39-yashdagades-projects.vercel.app/crash3/crash3.m3u8",
