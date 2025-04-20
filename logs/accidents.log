@@ -624,3 +624,301 @@ The time of day is likely daytime, as there is ample sunlight visible in the ima
 * The accident occurred during the daytime, as evidenced by the bright lighting in the image.
 * The vehicles are situated on the right side of the highway, with the white SUV in the left lane and the gray sedan in the right lane.
 * The scene suggests that the vehicles were traveling in opposite directions when the collision occurred.
+2025-04-19 20:28:22,005 - AccidentLog - INFO - Accident Detected - Stream: mn_c550, Location: MN Hwy 55 at Hwy 100, Time: 2025-04-20T00:28:21.081617, Description: The image shows a road, a grassy area, and trees, but no cars, so I cannot determine the specific accident situation, either the type or the location.
+2025-04-19 20:28:23,976 - AccidentLog - INFO - Accident Detected - Stream: mn_c550, Location: MN Hwy 55 at Hwy 100, Time: 2025-04-20T00:28:23.089177, Description: Based on the image, the scene appears to be a daytime accident involving a white car that has collided with a semi-truck. The white car is positioned in front of the semi-truck on the right side of the highway, while the truck is situated on the left side.
+2025-04-19 20:28:26,875 - AccidentLog - INFO - Accident Detected - Stream: mn_c550, Location: MN Hwy 55 at Hwy 100, Time: 2025-04-20T00:28:26.104329, Description: The scene is set in the daytime, with a dark-colored car positioned on the left side of the road, partially obscured by a grassy verge. The vehicle appears to be stationary, possibly due to an accident or breakdown.
+2025-04-19 20:28:31,873 - AccidentLog - INFO - Accident Detected - Stream: mn_c550, Location: MN Hwy 55 at Hwy 100, Time: 2025-04-20T00:28:31.121637, Description: The image shows a video still of a highway with no visible accidents, vehicles, or people, suggesting no accident was detected.
+2025-04-19 20:28:35,515 - AccidentLog - INFO - Accident Detected - Stream: mn_c550, Location: MN Hwy 55 at Hwy 100, Time: 2025-04-20T00:28:34.135379, Description: **Accident Description**
+
+* Location: Highway, based on the presence of a highway median and the Department of Transportation logo in the bottom left corner.
+* Vehicle Involved: A black car, likely a sedan, appears to have veered off-road.
+* Time of Day: Daytime, based on the lighting in the image.
+2025-04-19 20:28:43,396 - AccidentLog - INFO - Accident Detected - Stream: mn_c550, Location: MN Hwy 55 at Hwy 100, Time: 2025-04-20T00:28:42.161844, Description: **Accident Scene Description**
+
+The accident scene is illuminated by daylight, with a white truck and a silver car involved. The white truck appears to have veered into the grassy median, while the silver car remains on the road, near the right edge of the image. It is unclear whether the white truck was attempting to change lanes or if it lost control due to the accident. The presence of two yellow signs on the right side of the road, one of them displaying a red arrow, suggests
+2025-04-19 20:28:48,210 - AccidentLog - INFO - Accident Detected - Stream: mn_c550, Location: MN Hwy 55 at Hwy 100, Time: 2025-04-20T00:28:47.181247, Description: In the daylight, a white pick-up truck is visible driving on an empty highway, heading towards the bottom-left corner of the image. Another white vehicle, a smaller car, is located on the right side of the highway, adjacent to a grassy area, facing the opposite direction.
+2025-04-19 20:28:59,077 - AccidentLog - INFO - Accident Detected - Stream: mn_c550, Location: MN Hwy 55 at Hwy 100, Time: 2025-04-20T00:28:58.226390, Description: * A white SUV and a red car are involved in the accident, with the red car appearing to be in the right lane and the white SUV possibly having been involved in a collision or a lane change error.
+* The estimated time based on lighting is daytime, as there is sunlight in the image.
+2025-04-19 20:29:05,105 - AccidentLog - INFO - Accident Detected - Stream: mn_c550, Location: MN Hwy 55 at Hwy 100, Time: 2025-04-20T00:29:04.250964, Description: Unfortunately, I'm unable to provide a factual description of the accident scene as the image only shows a highway with no visible signs of an accident. There are no vehicles in the image, and it is difficult to determine the time of day or any details about a potential accident.
+2025-04-19 20:29:06,228 - AccidentLog - INFO - Accident Detected - Stream: mn_c550, Location: MN Hwy 55 at Hwy 100, Time: 2025-04-20T00:29:05.253107, Description: **Accident Description**
+
+The image captures a daytime scene on a highway, featuring multiple lanes and a grassy median. The accident involves a white vehicle, possibly a sedan or SUV, situated on the right side of the road, adjacent to the grassy median. 
+
+**Time of Day**
+
+Given the daylight and lack of headlights, the accident appears to have occurred during the daytime.
+2025-04-19 20:29:08,178 - AccidentLog - INFO - Accident Detected - Stream: mn_c550, Location: MN Hwy 55 at Hwy 100, Time: 2025-04-20T00:29:07.259108, Description: Based on the image, the scene appears to be set at daytime, with the sun casting a shadow on the left side of the image. In the distance, it seems a semi-truck may have lost part of its load, with debris scattered across the highway's right shoulder.
+2025-04-19 20:29:16,744 - AccidentLog - INFO - Accident Detected - Stream: mn_c550, Location: MN Hwy 55 at Hwy 100, Time: 2025-04-20T00:29:15.286686, Description: **Scene Description**
+
+* **Time:** Late afternoon, as evidenced by the shadows cast by the setting sun.
+
+* **Accident:** A white SUV appears to have collided with the highway's concrete median, resulting in damage to the vehicle's front end. The median's guardrail is partially detached from the concrete structure and lies on the ground, indicating a high-speed impact.
+
+* **Injuries:** There are no visible injuries or fatalities in the scene.
+
+* **Emergency Response:** No emergency vehicles are
+2025-04-19 20:29:23,015 - AccidentLog - INFO - Accident Detected - Stream: mn_c550, Location: MN Hwy 55 at Hwy 100, Time: 2025-04-20T00:29:22.319816, Description: Based on the image, it appears to be daytime, likely early morning or late afternoon when the lighting is soft. There are no visible accidents in the image, and no vehicles are stopped or damaged.
+2025-04-19 20:29:31,639 - AccidentLog - INFO - Accident Detected - Stream: mn_c550, Location: MN Hwy 55 at Hwy 100, Time: 2025-04-20T00:29:30.359551, Description: The image depicts a highway scene during the daytime, with two vehicles appearing to be involved in an accident. The vehicles are located in the center of the image, partially obscured by a white rectangle that spans the width of the image, concealing the details of the vehicles and the accident. Notably, the vehicles appear to be stopped on the shoulder of the highway, with no other vehicles in sight.
+
+**Key Observations:**
+
+* The accident scene is set against a clear, sunny backdrop.
+*
+2025-04-19 20:29:34,289 - AccidentLog - INFO - Accident Detected - Stream: mn_c550, Location: MN Hwy 55 at Hwy 100, Time: 2025-04-20T00:29:32.369420, Description: The image depicts a highway scene during the daytime, with no vehicles visible in the accident scene. The image does not provide any information about an accident, and the presence of the Department of Transportation logo in the bottom left corner suggests that the image may be a traffic camera still or a screenshot from a video feed.
+2025-04-19 20:29:40,989 - AccidentLog - INFO - Accident Detected - Stream: mn_c550, Location: MN Hwy 55 at Hwy 100, Time: 2025-04-20T00:29:40.399242, Description: Based on the image, it appears to be during the daytime, as the sun is casting shadows on the road and the sky is visible in the background. There is no visible accident in the image.
+2025-04-19 20:29:42,171 - AccidentLog - INFO - Accident Detected - Stream: mn_c550, Location: MN Hwy 55 at Hwy 100, Time: 2025-04-20T00:29:41.403117, Description: Daytime: A three-car accident is visible on the shoulder of the highway, with an orange sedan in front of a red car and a white car behind the red car.
+2025-04-19 20:29:45,248 - AccidentLog - INFO - Accident Detected - Stream: mn_c550, Location: MN Hwy 55 at Hwy 100, Time: 2025-04-20T00:29:44.419315, Description: The image depicts a highway scene with one vehicle involved in an accident. It appears to be daytime, with the sun casting shadows on the highway and surrounding areas. There is no description of the vehicle(s) involved in the accident.
+2025-04-19 20:41:17,775 - AccidentLog - INFO - Accident Detected - Stream: mn_c214, Location: MN Hwy 100 at Duluth St, Time: 2025-04-20T00:41:16.551913, Description: A white pickup truck has collided with the bridge support. The accident occurred during the late afternoon.
+2025-04-19 20:41:18,656 - AccidentLog - INFO - Accident Detected - Stream: mn_c550, Location: MN Hwy 55 at Hwy 100, Time: 2025-04-20T00:41:17.456743, Description: **Accident Description**
+
+* A white truck is partially visibility stopped on the right shoulder with its hazard lights illuminated.
+* A white passenger car appears to have crossed the median and is stopped on the left shoulder with no visible hazards.
+* The accident is most likely a head-on collision between the two vehicles.
+* The image appears to be captured during the early morning or late afternoon hours based on the lighting conditions.
+2025-04-19 20:41:20,816 - AccidentLog - INFO - Accident Detected - Stream: mn_c030, Location: MN I-94 at Riverside Ave, Time: 2025-04-20T00:41:19.771715, Description: **Accident Scene Description**
+
+A white pickup truck is stopped on the road, with a clear impact zone visible on the right side of the image. The surrounding environment suggests a daytime setting, with the sun positioned behind the trees in the background. This indicates that the accident likely occurred during the morning or early afternoon hours.
+2025-04-19 20:41:21,772 - AccidentLog - INFO - Accident Detected - Stream: mn_c669, Location: MN I-35W at 50th St, Time: 2025-04-20T00:41:20.670704, Description: **Accident Scene Description**
+
+**Time of Day:** Morning
+
+**Vehicles Involved:** Truck and Pickup
+
+**Collision Type:** Rear-end collision
+
+**Additional Details:**
+
+* The accident occurred on a highway with a concrete median separating the truck and pickup.
+* The truck and pickup are facing the same direction, indicating that the truck may have been traveling in the same direction as the pickup before the accident.
+2025-04-19 20:41:25,019 - AccidentLog - INFO - Accident Detected - Stream: mn_c030, Location: MN I-94 at Riverside Ave, Time: 2025-04-20T00:41:22.780475, Description: **Initial Response:** A preliminary response is provided below. Please note that the accident scene's details may be incomplete or inaccurate.
+
+**Accident Scene Description:** Truck and car appear to have collided, with the truck possibly rolling onto its side, near the right-hand side of the image. The sun is setting, casting a warm orange glow.
+
+**Limitations:** The image is blurry, making it difficult to discern finer details about the vehicles, their orientation, and the extent of the damage. The lighting
+2025-04-19 20:41:25,810 - AccidentLog - INFO - Accident Detected - Stream: mn_c669, Location: MN I-35W at 50th St, Time: 2025-04-20T00:41:24.684178, Description: **Accident Scene Description**
+
+* Vehicles involved: Pickup truck, pickup truck
+* Collision type: Side-swipe
+* Time of day: Dawn
+
+**Note:** The image features two pickup trucks, one on the left side of the image and the other on the right side, indicating a side-swipe collision at dawn based on the lighting conditions.
+2025-04-19 20:41:26,250 - AccidentLog - INFO - Accident Detected - Stream: mn_c669, Location: MN I-35W at 50th St, Time: 2025-04-20T00:41:23.683117, Description: The image shows a highway with multiple lanes and a concrete median separating the northbound and southbound traffic. The highway is empty except for a few vehicles, including a black vehicle that has collided with a concrete barrier on the right side of the road. The time of day is likely early morning or late afternoon based on the lighting conditions, which suggests that the accident occurred during a time when the sun is not directly overhead.
+
+Based on the image, here is a brief and factual description of the accident scene
+2025-04-19 20:41:27,552 - AccidentLog - INFO - Accident Detected - Stream: mn_c669, Location: MN I-35W at 50th St, Time: 2025-04-20T00:41:25.811584, Description: **Accident Description:** 
+Two sedans appear to have collided at an intersection during the early morning hours.
+2025-04-19 20:41:30,467 - AccidentLog - INFO - Accident Detected - Stream: mn_c214, Location: MN Hwy 100 at Duluth St, Time: 2025-04-20T00:41:28.589913, Description: **Accident Scene Description**
+
+A white SUV has collided with the concrete barrier of an off-ramp, likely at dawn or dusk based on the lighting conditions.
+2025-04-19 20:41:30,572 - AccidentLog - INFO - Accident Detected - Stream: mn_c550, Location: MN Hwy 55 at Hwy 100, Time: 2025-04-20T00:41:28.504027, Description: The accident scene involves two vehicles, a white sedan and a black SUV, with the sedan being partially on top of the SUV. The time of day is evening, as indicated by the setting sun's position in the image.
+2025-04-19 20:41:31,486 - AccidentLog - INFO - Accident Detected - Stream: mn_c214, Location: MN Hwy 100 at Duluth St, Time: 2025-04-20T00:41:30.597060, Description: The left lane and shoulder of the highway are impacted by a vehicle that appears to have lost control, slid off the roadway, and crashed into the shoulder. It was dark at the time of the accident, with the sun setting in the background.
+2025-04-19 20:41:32,197 - AccidentLog - INFO - Accident Detected - Stream: mn_c030, Location: MN I-94 at Riverside Ave, Time: 2025-04-20T00:41:29.807763, Description: **Accident Scene Description**
+
+* **Time of Day:** Sunset
+* **Collision Type:** Multiple vehicles involved, likely a multi-vehicle pileup
+* **Vehicles Involved:** Several vehicles, including multiple cars and possibly trucks or SUVs
+* **Condition:** Vehicles appear to be stationary, with some possibly damaged or crashed into each other or the median.
+2025-04-19 20:41:34,077 - AccidentLog - INFO - Accident Detected - Stream: mn_c550, Location: MN Hwy 55 at Hwy 100, Time: 2025-04-20T00:41:30.510585, Description: * Vehicle involved: Black car
+* Time of day: Dawn
+* Collision type: Crash into highway divider
+2025-04-19 20:41:34,280 - AccidentLog - INFO - Accident Detected - Stream: mn_c214, Location: MN Hwy 100 at Duluth St, Time: 2025-04-20T00:41:32.602611, Description: A white SUV and white sedan are involved in a collision, likely a T-bone, near a bridge, at dusk.
+2025-04-19 20:41:34,293 - AccidentLog - INFO - Accident Detected - Stream: mn_c214, Location: MN Hwy 100 at Duluth St, Time: 2025-04-20T00:41:29.592387, Description: **Traffic Monitoring System Report**
+
+* **Location:** Image 2, NE
+* **Accident Scene:** Two vehicles in collision, likely rear-end, daytime, right lane, with minor damage.
+* **Time of Day:** Daytime, based on lighting conditions.
+2025-04-19 20:41:34,356 - AccidentLog - INFO - Accident Detected - Stream: mn_c550, Location: MN Hwy 55 at Hwy 100, Time: 2025-04-20T00:41:33.524217, Description: The image shows a road with no vehicles present, indicating that there is no accident to report. The time of day is likely early morning or late evening, based on the lighting conditions.
+2025-04-19 20:41:36,391 - AccidentLog - INFO - Accident Detected - Stream: mn_c669, Location: MN I-35W at 50th St, Time: 2025-04-20T00:41:35.717814, Description: **Accident Scene Description:**
+
+*   **Vehicles Involved:** Car and guardrail
+*   **Collision Type:** Head-on collision with the guardrail
+*   **Time of Day:** Evening (based on the sunlight)
+2025-04-19 20:41:37,682 - AccidentLog - INFO - Accident Detected - Stream: mn_c214, Location: MN Hwy 100 at Duluth St, Time: 2025-04-20T00:41:34.280447, Description: The accident scene involves a white car and a black car that have collided, likely in the early morning or late evening based on the lighting conditions.
+2025-04-19 20:41:39,221 - AccidentLog - INFO - Accident Detected - Stream: mn_c669, Location: MN I-35W at 50th St, Time: 2025-04-20T00:41:38.729420, Description: **Truck collided head-on with concrete barrier on overpass at dusk or early morning.**
+2025-04-19 20:41:40,130 - AccidentLog - INFO - Accident Detected - Stream: mn_c030, Location: MN I-94 at Riverside Ave, Time: 2025-04-20T00:41:38.844137, Description: Based on the provided image, here is a concise description of the accident scene:
+
+**Time of Day:** Evening
+**Vehicles Involved:**
+* 1 Vehicle (exact type not visible)
+* 1 Broken-Down Vehicle (white sedan)
+* No other vehicles appear to be involved in the accident
+**Collision Type:** Possible Rear-End Collision
+* The white sedan is parked on the side of the road, and the other vehicle is not visible in the image.
+* The red
+2025-04-19 20:41:42,499 - AccidentLog - INFO - Accident Detected - Stream: mn_c669, Location: MN I-35W at 50th St, Time: 2025-04-20T00:41:41.742285, Description: **Accident Scene Description**
+
+A white pickup truck has collided with the concrete barrier on the right side of the highway, as captured in the attached image during the late afternoon. The lighting conditions suggest it is approximately 4:30 PM, with the sun positioned near the horizon.
+2025-04-19 20:41:42,504 - AccidentLog - INFO - Accident Detected - Stream: mn_c550, Location: MN Hwy 55 at Hwy 100, Time: 2025-04-20T00:41:41.559069, Description: The accident scene involves a **white sedan and a blue pickup**. It appears to be a **rear-end collision**. The time of day is **morning**, as indicated by the lighting conditions.
+2025-04-19 20:41:44,378 - AccidentLog - INFO - Accident Detected - Stream: mn_c214, Location: MN Hwy 100 at Duluth St, Time: 2025-04-20T00:41:43.644212, Description: **Accident Scene Description:**
+
+At dawn, a black SUV crashed into a concrete barrier on the right-hand side of the highway, with no other vehicles involved.
+2025-04-19 20:41:46,697 - AccidentLog - INFO - Accident Detected - Stream: mn_c550, Location: MN Hwy 55 at Hwy 100, Time: 2025-04-20T00:41:44.573918, Description: The accident scene involves a vehicle, likely a sedan, that has crossed the divider and is now on the other side of the road. This is evident from the white line on the road that has been broken by the vehicle. The accident occurred during the daytime, as indicated by the sun's angle and the shadows cast on the ground.
+2025-04-19 20:41:47,422 - AccidentLog - INFO - Accident Detected - Stream: mn_c550, Location: MN Hwy 55 at Hwy 100, Time: 2025-04-20T00:41:43.568443, Description: **Accident Scene Description**
+
+* **Time of Day:** Late morning
+* **Collision Type:** Unspecified
+* **Vehicles Involved:** Multiple vehicles in the area, exact number not clear
+2025-04-19 20:41:49,924 - AccidentLog - INFO - Accident Detected - Stream: mn_c214, Location: MN Hwy 100 at Duluth St, Time: 2025-04-20T00:41:42.639118, Description: The image shows a daytime scene with a three-vehicle collision on a highway, where a black SUV has crashed into the right shoulder, with no other vehicles involved in the accident.
+2025-04-19 20:41:50,947 - AccidentLog - INFO - Accident Detected - Stream: mn_c214, Location: MN Hwy 100 at Duluth St, Time: 2025-04-20T00:41:48.665088, Description: **Accident Scene Description**
+
+The accident involves two sedans that have collided in the right lane, with the time of day being **morning** based on the lighting conditions.
+2025-04-19 20:41:51,689 - AccidentLog - INFO - Accident Detected - Stream: mn_c550, Location: MN Hwy 55 at Hwy 100, Time: 2025-04-20T00:41:50.588710, Description: The accident appears to be a daytime single-vehicle incident, with a car near the right-hand side of the image on the road, facing the opposite direction. The presence of headlights in the image indicates that the accident occurred during the daytime, and the lighting conditions suggest that it was likely during the afternoon or early evening hours. The car is positioned near the right-hand side of the image, angled slightly towards the center of the road, which suggests that it may have experienced a slide or skid before
+2025-04-19 20:41:53,736 - AccidentLog - INFO - Accident Detected - Stream: mn_c669, Location: MN I-35W at 50th St, Time: 2025-04-20T00:41:51.772359, Description: *   **Time of Day:** Dawn
+*   **Collision Type:** Head-on collision
+*   **Vehicles Involved:**
+    *   One vehicle appears to be overturned near the side of the road.
+    *   Another vehicle is visible on the opposite side of the highway, facing in the opposite direction.
+2025-04-19 20:41:53,777 - AccidentLog - INFO - Accident Detected - Stream: mn_c550, Location: MN Hwy 55 at Hwy 100, Time: 2025-04-20T00:41:51.591727, Description: The image shows a highway with a water tower in the background, and the words "m DEPARTMENT OF TRANSPORTATION" in the bottom-left corner. The image appears to be a screenshot from a traffic monitoring system, possibly taken during the evening hours.
+
+**Accident Scene:**
+A black car is seen in the middle of the road, with a slight blur around it, indicating that it may have been involved in an accident. The surrounding area is empty, with no other vehicles or people in
+2025-04-19 20:41:55,382 - AccidentLog - INFO - Accident Detected - Stream: mn_c550, Location: MN Hwy 55 at Hwy 100, Time: 2025-04-20T00:41:53.596957, Description: **Accident Scene Description**
+
+* A single vehicle, a black car, is stalled on the highway divider at **dawn**.
+2025-04-19 20:41:55,843 - AccidentLog - INFO - Accident Detected - Stream: mn_c669, Location: MN I-35W at 50th St, Time: 2025-04-20T00:41:53.737183, Description: Upon analyzing the image, it is evident that there has been an accident on the highway, likely during daytime hours, as indicated by the sun's reflection on the road. The presence of multiple vehicles in the image suggests a collision involving at least two vehicles, with one vehicle potentially being a semi-truck. However, without closer inspection, it is challenging to determine the exact nature of the accident or the specific vehicles involved.
+2025-04-19 20:41:57,562 - AccidentLog - INFO - Accident Detected - Stream: mn_c030, Location: MN I-94 at Riverside Ave, Time: 2025-04-20T00:41:41.857595, Description: Based on the attached image, here is a brief, factual, and concise description of the accident scene:
+
+**Daytime:** Black SUV, red wire fencing damage, no other vehicles involved.
+2025-04-19 20:41:57,718 - AccidentLog - INFO - Accident Detected - Stream: mn_c669, Location: MN I-35W at 50th St, Time: 2025-04-20T00:41:55.843750, Description: The image shows a daytime scene with two vehicles involved in a collision, likely a rear-end crash, judging by the positioning of the cars. The time of day is morning or early afternoon, as indicated by the angle and warmth of the sunlight.
+2025-04-19 20:41:58,231 - AccidentLog - INFO - Accident Detected - Stream: mn_c214, Location: MN Hwy 100 at Duluth St, Time: 2025-04-20T00:41:50.669973, Description: **Accident Scene Description**
+
+* Time of day: Evening
+* Vehicles involved: 1 white SUV and 1 dark-colored pickup truck
+* Collision type: Head-on collision
+
+Note: The exact location and time of the accident are not specified in the image.
+2025-04-19 20:42:00,478 - AccidentLog - INFO - Accident Detected - Stream: mn_c030, Location: MN I-94 at Riverside Ave, Time: 2025-04-20T00:41:52.894272, Description: This image depicts a daytime scene where a pickup truck and a sedan have collided in the left-hand lane. The time of day is likely mid-morning to early afternoon, based on the bright lighting conditions.
+2025-04-19 20:42:01,548 - AccidentLog - INFO - Accident Detected - Stream: mn_c030, Location: MN I-94 at Riverside Ave, Time: 2025-04-20T00:42:00.917597, Description: A truck and a pickup truck are involved in a collision near the right-center lane, with the time of day being morning, as indicated by the lighting conditions.
+2025-04-19 20:42:02,497 - AccidentLog - INFO - Accident Detected - Stream: mn_c030, Location: MN I-94 at Riverside Ave, Time: 2025-04-20T00:42:01.921561, Description: Two cars have collided right-center on a highway, likely resulting in a head-on crash, and the accident occurred during the morning hours based on the sunlight.
+2025-04-19 20:42:05,213 - AccidentLog - INFO - Accident Detected - Stream: mn_c030, Location: MN I-94 at Riverside Ave, Time: 2025-04-20T00:41:57.563593, Description: **Accident Scene Description**
+
+* **Time of Day:** Dawn
+* **Collision Type:** Head-on crash between two sedans
+* **Vehicles Involved:** Two sedans
+2025-04-19 20:43:36,083 - AccidentLog - INFO - Accident Detected - Stream: mn_c550, Location: MN Hwy 55 at Hwy 100, Time: 2025-04-20T00:43:35.368298, Description: No accident detected after closer inspection.
+2025-04-19 20:43:37,053 - AccidentLog - INFO - Accident Detected - Stream: mn_c550, Location: MN Hwy 55 at Hwy 100, Time: 2025-04-20T00:43:36.369977, Description: Daytime: White pickup truck crashed into a highway divider, causing damage to the front.
+2025-04-19 20:43:38,638 - AccidentLog - INFO - Accident Detected - Stream: mn_c214, Location: MN Hwy 100 at Duluth St, Time: 2025-04-20T00:43:36.482248, Description: No accident detected after closer inspection.
+2025-04-19 20:43:41,622 - AccidentLog - INFO - Accident Detected - Stream: mn_c030, Location: MN I-94 at Riverside Ave, Time: 2025-04-20T00:43:40.705532, Description: * No accident detected after closer inspection.
+2025-04-19 20:43:41,726 - AccidentLog - INFO - Accident Detected - Stream: mn_c550, Location: MN Hwy 55 at Hwy 100, Time: 2025-04-20T00:43:40.388071, Description: **No accident detected after closer inspection**
+2025-04-19 20:43:42,889 - AccidentLog - INFO - Accident Detected - Stream: mn_c550, Location: MN Hwy 55 at Hwy 100, Time: 2025-04-20T00:43:42.394062, Description: Cars are stopped on the side of the road, tail lights illuminated, at dusk.
+2025-04-19 20:43:44,390 - AccidentLog - INFO - Accident Detected - Stream: mn_c669, Location: MN I-35W at 50th St, Time: 2025-04-20T00:43:43.614252, Description: "Black SUV stationary on left shoulder during morning light."
+2025-04-19 20:43:44,414 - AccidentLog - INFO - Accident Detected - Stream: mn_c214, Location: MN Hwy 100 at Duluth St, Time: 2025-04-20T00:43:43.515283, Description: **Accident Scene Description**
+
+*   **Vehicles Involved:** Black pickup and white SUV
+*   **Collision Type:** Rear-end collision
+*   **Time of Day:** Afternoon (based on lighting conditions)
+
+No accident detected after closer inspection.
+2025-04-19 20:43:45,801 - AccidentLog - INFO - Accident Detected - Stream: mn_c550, Location: MN Hwy 55 at Hwy 100, Time: 2025-04-20T00:43:45.406852, Description: **Daytime:** White pickup truck collided with silver car.
+2025-04-19 20:43:46,392 - AccidentLog - INFO - Accident Detected - Stream: mn_c669, Location: MN I-35W at 50th St, Time: 2025-04-20T00:43:44.619340, Description: **Accident Scene Description**
+
+* No accident detected after closer inspection.
+2025-04-19 20:43:48,960 - AccidentLog - INFO - Accident Detected - Stream: mn_c214, Location: MN Hwy 100 at Duluth St, Time: 2025-04-20T00:43:41.507688, Description: **Accident Scene Description**
+
+* No accident detected after closer inspection.
+2025-04-19 20:43:50,341 - AccidentLog - INFO - Accident Detected - Stream: mn_c669, Location: MN I-35W at 50th St, Time: 2025-04-20T00:43:49.636688, Description: **Daytime: Two sedans collide at an intersection.**
+2025-04-19 20:43:50,891 - AccidentLog - INFO - Accident Detected - Stream: mn_c030, Location: MN I-94 at Riverside Ave, Time: 2025-04-20T00:43:49.739251, Description: * Accident scene: Red truck collided with black SUV, daytime.
+* Time of day: Daytime, as indicated by the sun's position.
+2025-04-19 20:43:53,393 - AccidentLog - INFO - Accident Detected - Stream: mn_c030, Location: MN I-94 at Riverside Ave, Time: 2025-04-20T00:43:51.744562, Description: No accident detected after closer inspection.
+2025-04-19 20:43:54,325 - AccidentLog - INFO - Accident Detected - Stream: mn_c669, Location: MN I-35W at 50th St, Time: 2025-04-20T00:43:50.640483, Description: No accident detected after closer inspection.
+2025-04-19 20:43:54,820 - AccidentLog - INFO - Accident Detected - Stream: mn_c669, Location: MN I-35W at 50th St, Time: 2025-04-20T00:43:54.325611, Description: One vehicle overturned on the highway, daytime.
+2025-04-19 20:43:55,176 - AccidentLog - INFO - Accident Detected - Stream: mn_c214, Location: MN Hwy 100 at Duluth St, Time: 2025-04-20T00:43:51.542287, Description: White sedan stopped on the left shoulder near the overpass, right lane blocked.
+2025-04-19 20:43:55,415 - AccidentLog - INFO - Accident Detected - Stream: mn_c550, Location: MN Hwy 55 at Hwy 100, Time: 2025-04-20T00:43:51.430768, Description: No accident detected after closer inspection.
+2025-04-19 20:43:57,125 - AccidentLog - INFO - Accident Detected - Stream: mn_c214, Location: MN Hwy 100 at Duluth St, Time: 2025-04-20T00:43:55.177097, Description: Two sedans collide near a bridge, on an overpass, at dawn.
+2025-04-19 20:43:58,608 - AccidentLog - INFO - Accident Detected - Stream: mn_c669, Location: MN I-35W at 50th St, Time: 2025-04-20T00:43:54.820637, Description: No accident detected after closer inspection.
+2025-04-19 20:44:00,667 - AccidentLog - INFO - Accident Detected - Stream: mn_c669, Location: MN I-35W at 50th St, Time: 2025-04-20T00:43:46.625148, Description: No accident detected after closer inspection.
+2025-04-19 20:44:01,044 - AccidentLog - INFO - Accident Detected - Stream: mn_c669, Location: MN I-35W at 50th St, Time: 2025-04-20T00:43:58.608739, Description: **Vehicle Analysis and Accident Scene Description**
+
+Upon analyzing the provided image, it is evident that no accident is present. The scene is devoid of any visible collisions or damage to the vehicles depicted. The absence of any discernible accident or vehicular damage suggests that the image does not capture an accident scenario.
+
+**Reasoning and Conclusion**
+
+The image is a static snapshot of a highway or road, featuring multiple vehicles moving along the lanes. The absence of any signs of collision, such as crumpled metal
+2025-04-19 20:44:02,763 - AccidentLog - INFO - Accident Detected - Stream: mn_c669, Location: MN I-35W at 50th St, Time: 2025-04-20T00:44:00.667572, Description: The image contains a traffic camera screenshot with a logo in the bottom left corner that says "MN DEPARTMENT OF TRANSPORTATION", so it's likely that the 'few-shot examples' were generated from other traffic camera screenshots.
+
+**Daytime: Two sedans collide at an intersection.**
+2025-04-19 20:44:03,027 - AccidentLog - INFO - Accident Detected - Stream: mn_c550, Location: MN Hwy 55 at Hwy 100, Time: 2025-04-20T00:43:55.415541, Description: **Accident Summary:**
+
+* A white van is stopped on the highway, with no other vehicles involved, at dawn.
+2025-04-19 20:44:03,834 - AccidentLog - INFO - Accident Detected - Stream: mn_c550, Location: MN Hwy 55 at Hwy 100, Time: 2025-04-20T00:43:48.420864, Description: **Accident Scene Description**
+
+* Two vehicles are involved in the accident, with the white truck appearing to have rear-ended the black car.
+* The accident appears to be a rear-end collision.
+* The time of day is likely early morning or late afternoon based on the lighting conditions.
+2025-04-19 20:44:03,961 - AccidentLog - INFO - Accident Detected - Stream: mn_c214, Location: MN Hwy 100 at Duluth St, Time: 2025-04-20T00:43:57.125766, Description: No accident detected after closer inspection.
+2025-04-19 20:44:05,091 - AccidentLog - INFO - Accident Detected - Stream: mn_c214, Location: MN Hwy 100 at Duluth St, Time: 2025-04-20T00:43:50.539827, Description: No accident detected after closer inspection.
+2025-04-19 20:44:05,471 - AccidentLog - INFO - Accident Detected - Stream: mn_c669, Location: MN I-35W at 50th St, Time: 2025-04-20T00:44:03.674941, Description: **Accident Detection**
+
+* No accident detected after closer inspection.
+2025-04-19 20:44:05,676 - AccidentLog - INFO - Accident Detected - Stream: mn_c030, Location: MN I-94 at Riverside Ave, Time: 2025-04-20T00:44:03.797511, Description: **Accident Scene Description**
+
+Upon closer inspection, no accident is detected in the provided image. The scene remains accident-free, indicating all vehicles are in motion without any signs of collision or incident.
+2025-04-19 20:44:07,525 - AccidentLog - INFO - Accident Detected - Stream: mn_c030, Location: MN I-94 at Riverside Ave, Time: 2025-04-20T00:44:06.805329, Description: None. No accident detected after closer inspection.
+2025-04-19 20:44:07,530 - AccidentLog - INFO - Accident Detected - Stream: mn_c030, Location: MN I-94 at Riverside Ave, Time: 2025-04-20T00:44:05.802162, Description: No accident detected after closer inspection.
+2025-04-19 20:44:08,152 - AccidentLog - INFO - Accident Detected - Stream: mn_c669, Location: MN I-35W at 50th St, Time: 2025-04-20T00:44:07.690416, Description: The image depicts a daytime highway scene with a possible accident involving a white SUV and a white sedan.
+2025-04-19 20:44:09,983 - AccidentLog - INFO - Accident Detected - Stream: mn_c550, Location: MN Hwy 55 at Hwy 100, Time: 2025-04-20T00:44:09.497084, Description: No accident detected after closer inspection.
+2025-04-19 20:44:10,055 - AccidentLog - INFO - Accident Detected - Stream: mn_c669, Location: MN I-35W at 50th St, Time: 2025-04-20T00:44:08.691412, Description: Two sedans appear to have collided on the highway at dawn.
+2025-04-19 20:44:12,119 - AccidentLog - INFO - Accident Detected - Stream: mn_c669, Location: MN I-35W at 50th St, Time: 2025-04-20T00:44:11.706054, Description: Two sedans collide at an intersection in the morning.
+2025-04-19 20:44:12,318 - AccidentLog - INFO - Accident Detected - Stream: mn_c214, Location: MN Hwy 100 at Duluth St, Time: 2025-04-20T00:44:08.611373, Description: **Accident Scene Description**
+
+* **Time of Day:** Early morning
+* **Collision Type:** Head-on crash between a white SUV and a black sedan
+* **Vehicle Involved:** White SUV and black sedan
+2025-04-19 20:44:14,146 - AccidentLog - INFO - Accident Detected - Stream: mn_c550, Location: MN Hwy 55 at Hwy 100, Time: 2025-04-20T00:44:12.511157, Description: The image shows a single vehicle, a black sedan, driving on the highway at dusk. There is no accident present.
+2025-04-19 20:44:14,200 - AccidentLog - INFO - Accident Detected - Stream: mn_c669, Location: MN I-35W at 50th St, Time: 2025-04-20T00:44:13.711938, Description: Two sedans collide at an intersection.
+2025-04-19 20:44:14,269 - AccidentLog - INFO - Accident Detected - Stream: mn_c669, Location: MN I-35W at 50th St, Time: 2025-04-20T00:44:10.701052, Description: Two sedans collided, one possibly overturned, near the highway divider during sunrise.
+2025-04-19 20:44:14,632 - AccidentLog - INFO - Accident Detected - Stream: mn_c030, Location: MN I-94 at Riverside Ave, Time: 2025-04-20T00:44:12.827710, Description: A blue truck and an unknown white vehicle are involved in a collision on the road, with the time of day being early morning.
+2025-04-19 20:44:16,127 - AccidentLog - INFO - Accident Detected - Stream: mn_c669, Location: MN I-35W at 50th St, Time: 2025-04-20T00:44:14.717046, Description: No accident detected after closer inspection.
+2025-04-19 20:44:17,088 - AccidentLog - INFO - Accident Detected - Stream: mn_c214, Location: MN Hwy 100 at Duluth St, Time: 2025-04-20T00:44:13.621660, Description: No accident detected after closer inspection.
+2025-04-19 20:44:17,364 - AccidentLog - INFO - Accident Detected - Stream: mn_c550, Location: MN Hwy 55 at Hwy 100, Time: 2025-04-20T00:44:16.521755, Description: One vehicle appears to have hit the side rail of the highway. 
+
+The accident appears to be a **single-vehicle accident** involving a **red vehicle**, which appears to have **hit the side rail of the highway**. The time of day is **dawn**, as indicated by the lighting conditions.
+2025-04-19 20:44:18,322 - AccidentLog - INFO - Accident Detected - Stream: mn_c030, Location: MN I-94 at Riverside Ave, Time: 2025-04-20T00:44:14.632698, Description: Two sedans collide at an intersection.
+2025-04-19 20:44:19,433 - AccidentLog - INFO - Accident Detected - Stream: mn_c550, Location: MN Hwy 55 at Hwy 100, Time: 2025-04-20T00:44:15.518439, Description: No accident detected after closer inspection.
+2025-04-19 20:44:20,054 - AccidentLog - INFO - Accident Detected - Stream: mn_c669, Location: MN I-35W at 50th St, Time: 2025-04-20T00:44:17.727093, Description: **Accident Detection and Description**
+
+Upon examining the attached image, an accident was detected at 07:14:59. The accident scene description is as follows:
+
+* Two black sedans are involved in a crash.
+* The collision type is a rear-end collision.
+* The time of day is morning, based on the lighting conditions.
+
+**Answer:** Two black sedans in a rear-end collision at 07:14:59.
+2025-04-19 20:44:20,769 - AccidentLog - INFO - Accident Detected - Stream: mn_c214, Location: MN Hwy 100 at Duluth St, Time: 2025-04-20T00:44:17.088942, Description: **Vehicle Information:**
+
+* **White SUV**
+* **Sedan**
+
+**Collision Type:**
+
+* **Rear-end collision**
+
+**Time of Day:**
+
+* **Early morning**
+2025-04-19 20:44:21,324 - AccidentLog - INFO - Accident Detected - Stream: mn_c214, Location: MN Hwy 100 at Duluth St, Time: 2025-04-20T00:44:20.769386, Description: Two sedans collided at an intersection in the early morning.
+2025-04-19 20:44:21,465 - AccidentLog - INFO - Accident Detected - Stream: mn_c030, Location: MN I-94 at Riverside Ave, Time: 2025-04-20T00:44:07.809692, Description: There is no accident detected after closer inspection.
+2025-04-19 20:44:23,469 - AccidentLog - INFO - Accident Detected - Stream: mn_c030, Location: MN I-94 at Riverside Ave, Time: 2025-04-20T00:44:21.466378, Description: **Accident Summary:**
+
+* A blue pickup truck and a silver sedan are involved in a collision on the highway.
+* The collision type is unclear, but it appears to be a rear-end crash.
+* The lighting conditions suggest it is daytime, likely during the early morning or late evening hours.
+2025-04-19 20:44:23,547 - AccidentLog - INFO - Accident Detected - Stream: mn_c669, Location: MN I-35W at 50th St, Time: 2025-04-20T00:44:16.724407, Description: No accident detected after closer inspection.
+2025-04-19 20:44:24,191 - AccidentLog - INFO - Accident Detected - Stream: mn_c214, Location: MN Hwy 100 at Duluth St, Time: 2025-04-20T00:44:03.962183, Description: Error generating description.
+2025-04-19 20:44:24,199 - AccidentLog - INFO - Accident Detected - Stream: mn_c669, Location: MN I-35W at 50th St, Time: 2025-04-20T00:44:20.735971, Description: **Daytime:** No accident detected after closer inspection.
+2025-04-19 20:44:24,850 - AccidentLog - INFO - Accident Detected - Stream: mn_c669, Location: MN I-35W at 50th St, Time: 2025-04-20T00:44:23.747392, Description: Two sedans are facing in opposite directions, with no other vehicles in sight. The time of day is likely early morning or late evening, as indicated by the low sun angle. The image shows a highway with a guardrail on the right side and trees in the background.
+
+Answer: Two sedans facing in opposite directions on highway.
+2025-04-19 20:44:25,689 - AccidentLog - INFO - Accident Detected - Stream: mn_c030, Location: MN I-94 at Riverside Ave, Time: 2025-04-20T00:44:18.323023, Description: **Accident Description:**
+
+*   **Time of Day:** Evening
+*   **Collision Type:** Head-on crash
+*   **Vehicles Involved:** Two sedans
+2025-04-19 20:44:26,401 - AccidentLog - INFO - Accident Detected - Stream: mn_c030, Location: MN I-94 at Riverside Ave, Time: 2025-04-20T00:44:25.690201, Description: **Accident Description**
+
+* A white box truck is stopped beside the highway, with a red barrier across the road in front of it.
+* The accident appears to have occurred during the daytime, based on the lighting conditions.
+2025-04-19 20:44:27,846 - AccidentLog - INFO - Accident Detected - Stream: mn_c030, Location: MN I-94 at Riverside Ave, Time: 2025-04-20T00:44:26.401676, Description: A red SUV collided with a white car on the highway at sunrise.
+2025-04-19 20:44:28,140 - AccidentLog - INFO - Accident Detected - Stream: mn_c669, Location: MN I-35W at 50th St, Time: 2025-04-20T00:44:27.765525, Description: **Daytime: No accident detected after closer inspection.**
+2025-04-19 20:44:29,583 - AccidentLog - INFO - Accident Detected - Stream: mn_c030, Location: MN I-94 at Riverside Ave, Time: 2025-04-20T00:44:27.846764, Description: Two sedans rear-ended by a semi-trailer, daytime.
+2025-04-19 20:44:30,163 - AccidentLog - INFO - Accident Detected - Stream: mn_c030, Location: MN I-94 at Riverside Ave, Time: 2025-04-20T00:44:23.469940, Description: There is no accident detected in the image.

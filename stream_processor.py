@@ -48,9 +48,23 @@ CLASSIFICATION_PROMPT = (
     "Respond with exactly one word: 'accident' or 'safe'."
 )
 DESCRIPTION_PROMPT = (
-    "An accident has been detected in the attached image. Provide a brief, factual description of the accident scene, "
-    "focusing on the vehicles involved and their apparent situation. Include the approximate time based on lighting if possible (e.g., daytime, nighttime). "
-    "Limit the description to 1-2 sentences. Example: 'Daytime: A white sedan appears to have rear-ended a blue SUV on the highway shoulder.'"
+'''You are an automated traffic monitoring system. An accident has been detected in the attached image.  
+Provide a brief, factual, and **concise** description (ideally under **10 words**) of the accident scene.  
+Focus only on the **vehicles involved**, their apparent **collision type**, and the **time of day** based on lighting conditions.  
+
+Avoid any extra commentary or speculative details. Keep it maximum to 10 words. If no accident present just say "No accident detected after closer inspection".
+
+Few-Shot Examples of expected outputs: 
+- **Daytime: Two sedans collide at an intersection.**
+- **Nighttime: Truck rear-ended by speeding car.**
+- **Dawn: SUV flipped near off-ramp barrier.**
+- **Daytime: Motorcycle down beside white sedan.**
+- **Evening: Pileup involving 3 vehicles in fog.**
+- **Noon: Black car crashed into highway divider.**
+- **Night: Head-on crash between two sedans.**
+- **Sunset: Van overturned near construction zone.**
+- **Daylight: Collision on wet road, cars stalled.**
+- **Morning: Blue pickup rear-ended silver sedan.**'''
 )
 
 # --- Fallback Sources --- (Used if stream_config['url'] == 'fallback')
@@ -206,10 +220,14 @@ class VideoStreamProcessor:
                     frame_b64 = self.analysis_queue.get(timeout=1.0)
                 except Empty:
                     continue
-                
+
+                # --- START SIMULATION --- 
+                # Temporarily bypass actual detection for testing
                 # Perform accident detection
-                result = self.detect_accident(frame_b64)
-                
+                # result = self.detect_accident(frame_b64)
+                result = "accident" if random.random() < 0.3 else "safe"
+                # --- END SIMULATION ---
+
                 # Update legacy detection result for backward compatibility
                 current_time = datetime.datetime.utcnow().isoformat()
                 self.latest_detection_result = {
@@ -219,6 +237,16 @@ class VideoStreamProcessor:
                     "timestamp": current_time,
                     "location": self.location
                 }
+                
+                # Create and send classification update message regardless of result
+                classification_message = {
+                    "type": "classification_update",
+                    "stream_id": self.stream_id,
+                    "timestamp": current_time,
+                    "result": result,
+                    "location": self.location
+                }
+                self.broadcast_queue.put(classification_message)
                 
                 # If accident detected, get description and broadcast alert
                 if result == "accident":

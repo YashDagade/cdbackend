@@ -222,6 +222,11 @@
             <h3>Log</h3>
             <div class="log" id="log"></div>
         </div>
+
+        <div class="log-container">
+            <h3>Classification Log (Live)</h3>
+            <div class="log" id="classificationLog"></div>
+        </div>
     </div>
     
     <script>
@@ -239,6 +244,7 @@
         const fpsCounter = document.getElementById('fpsCounter');
         const framesSent = document.getElementById('framesSent');
         const currentStatus = document.getElementById('currentStatus');
+        const classificationLogDiv = document.getElementById('classificationLog');
         
         // WebSocket connections
         let frameSocket = null;
@@ -268,6 +274,16 @@
             logDiv.appendChild(entry);
             // Auto-scroll to the bottom
             logDiv.scrollTop = logDiv.scrollHeight;
+        }
+        
+        // Log helper for classification log
+        function logClassification(message) {
+            const entry = document.createElement('div');
+            const timestamp = new Date().toLocaleTimeString();
+            entry.textContent = `[${timestamp}] ${message}`;
+            classificationLogDiv.appendChild(entry);
+            // Auto-scroll to the bottom
+            classificationLogDiv.scrollTop = classificationLogDiv.scrollHeight;
         }
         
         // Format timestamp
@@ -455,7 +471,7 @@
         
         // Connect to frame stream
         function connectFrameStream(protocol, host, port) {
-            const wsUrl = `${protocol}//${host}${port}/ws/stream/${currentStreamId}`;
+            const wsUrl = `wss://cdbackend.onrender.com/ws/stream/${currentStreamId}`;
             log(`Connecting to frame stream: ${wsUrl}`);
             
             try {
@@ -526,6 +542,17 @@
                         else if (data.type === 'accident_alert') {
                             log(`🚨 ACCIDENT ALERT: ${data.description}`);
                             addAccidentAlert(data);
+                        }
+                        else if (data.type === 'classification_update') {
+                            // Don't log every "safe" classification to the main log, only the dedicated one
+                            // log(`Classification result: ${data.result}`);
+                            logClassification(`Stream [${data.stream_id}] classified as: ${data.result.toUpperCase()} at ${formatTimestamp(data.timestamp)}`);
+                            // Optionally update the main status only if it's safe and wasn't already an accident
+                            // This prevents flickering if an accident alert arrived slightly before/after
+                            if (data.result === 'safe' && !currentStatus.classList.contains('status-accident')) {
+                                currentStatus.textContent = "SAFE";
+                                currentStatus.className = "accident-status status-safe";
+                            }
                         }
                     } catch (e) {
                         log(`Error parsing analysis message: ${e.message}`);
